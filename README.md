@@ -55,14 +55,14 @@ ccs4prot is as an **R package**.
 Download the package with the git clone command:
 
 ```bash
-git clone https://gitlab.com/laura_fancello/ccs4prot.git
+git clone https://github.com/laurafancello/CCs4prot.git
 ```
 
 Initiate R and install the R package using devtools (devtools needs to be installed as well)
 
 ```{r}
 library("devtools")
-devtools::install("ccs4prot")
+devtools::install("CCs4prot")
 ```
 
 
@@ -70,5 +70,5 @@ devtools::install("ccs4prot")
 
 To learn how to use ccs4prot, please refer to the introductory vignette posted at this link: 
 
-* [https://gitlab.com/laura_fancello/ccs4prot/vignettes/IntroToCCs4prot.Rmd]https://gitlab.com/laura_fancello/ccs4prot/vignettes/IntroToCCs4prot.Rmd)
+* [https://github.com/laurafancello/CCs4prot/blob/main/vignettes/IntroToCCs4prot.Rmd)
 

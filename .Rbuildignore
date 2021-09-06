@@ -1,2 +1,4 @@
 ^CCs4prot\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
+^cran-comments.md$

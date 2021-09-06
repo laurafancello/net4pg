@@ -1,16 +1,36 @@
 Package: CCs4prot
-Title: What the Package Does (One Line, Title Case)
+Title: Handle Ambiguity of Protein Identifications from Shotgun Proteomics
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Laura",
+           family = "Fancello",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           email = "laura.fancello@cea.fr", 
+           comment = c(ORCID = "0000-0003-4708-4080"))
+Maintainer: Laura Fancello <laura.fancello@cea.fr>
+Description: The CCs4prots package allows to assess and handle ambiguous protein identifications obtained in shotgun proteomics due to the presence of shared peptides. It implements methods for two main applications. First, it allows to represent and quantify ambiguity of protein identifications by means of graph connected components (CCs). In graph theory, CCs are defined as the largest subgraphs in which any two vertices are connected to each other by a path and not connected to any other of the vertices in the supergraph. Here, proteins sharing one or more peptides are thus gathered in the same CC (multi-protein CC), while unambiguous protein identifications constitute CCs with a single protein vertex (single-protein CCs). Therefore, the proportion of single-protein CCs and the size of multi-protein CCs can be used to measure the level of ambiguity of protein identifications. The package implements a strategy to efficiently calculate graph connected components on large datasets and allows to visually inspect them. Secondly, the CCs4prots package allows to exploit the increasing availability of matched transcriptomic and proteomic datasets to  reduce ambiguity of protein identifications. More precisely, it implement a transcriptome-based post-hoc filtering strategy which aims at reducing ambiguity in protein identifications by removing those proteins whose corresponding transcript is not expressed in the sample-matched transcriptome. The underlying assumption is that, according to the central dogma of biology, there can be no proteins without the corresponding transcript. Most importantly, the package allows to visually inspect the effect of the filtering on protein identifications and quantify ambiguity before and after filtering by means of graph connected components. As such, it constitutes a reproducible and transparent method to exploit transcriptome information to enhance protein identifications.
+Imports:
+	data.table,
+	graph,
+  bigstatsr,
+  Matrix,
+  magrittr,
+  stringr,
+  methods,
+  utils,
+  graphics
+Depends:
+  R (>= 3.6.0),
+Suggests:
+  knitr,
+  rmarkdown,
+  roxygen2,
+  BiocStyle,
+  igraph,
+  ggplot2
+License: GPL-3
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr

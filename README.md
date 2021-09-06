@@ -2,15 +2,18 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-`​``{r, echo = FALSE}
+```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "README-"
 )
-`​``
+```
+
+<style>
+body {
+text-align: justify}
+</style>
 
 # Handle Ambiguity of Protein Identifications from Shotgun Proteomics  
 
@@ -18,37 +21,25 @@ knitr::opts_chunk$set(
 **Analyze ambiguous protein identifications using graph connected components (CCs)** 
 --- 
 
-  Ambiguity of protein identifications is an important issue in shotgun proteomics and it is due to the
-presence of shared peptides. Shared peptides are very frequent in higher eukaryotes and can generate quite complex peptide-to-protein
-mapping structures. These structures can be efficiently represented using bipartite graphs, with peptides
-and proteins as vertices and with edges featuring peptide to protein membership. The graph-based representation also facilitates the 
-assessment and quantification of ambiguity in protein identifications, by means of graph theory and, in particular, using graph connected 
-components (CCs). Graph CCs are the largest subgraphs in which any two vertices are connected to each 
-other by a path and not connected to any other of the vertices in the supergraph. Proteins sharing one or more peptides are
-thus gathered in the same CC (multi-protein CCs), while unambiguous protein identifications are represented by CCs with a single
-protein vertex (single-protein CCs). The proportion of multi-protein versus single-protein CCs and the size (i.e. number of protein members) of
-multi-protein CCs can be used as a measure of the ambiguity of protein identifications. 
+
+Protein inference is a central issue in proteomics, given the presence of shared peptides (*i.e.*, peptides that might originate from different proteins sharing homology, from different proteoforms due to alternative mRNA splicing, post-translational modifications, proteolytic cleavages, and/or allelic variants). Indeed, in bottom-up mass spectrometry-based proteomics, the most widely used proteomic approach, peptide-protein connectivity is lost for experimental reasons and protein identifications are to be inferred from peptide identifications. Shared peptides can generate quite complex peptide-to-protein mapping structures but these can be efficiently represented using bipartite graphs, with peptides
+and proteins as vertices and with edges featuring peptide to protein membership.
+Graph connected components (CCs) (*i.e.*, the largest subgraphs in which any two vertices are connected to each other by a path and not connected to any other of the vertices in the supergraph) can be used as a mesure of the level of ambgiuty in protein identifications.  
 CCs represent a peptide-centric strategy to group proteins and it is independent from the variety of protein_centric strategies of protein
-grouping and protein inference.  As such, it does not require protein inference and it is widely applicable, reproducible and transparent. 
+grouping and protein inference.  As such, it does not require protein inference and it is widely applicable, reproducible and transparent.   
+The CCs4prot package allows to build graph from shotgun proteomic identifications and calculate its connected component.  
 
 
-**Reduce ambiguity of protein identifications by transcriptome-informed post-hoc filtering** 
+**Reduce ambiguity of protein identifications by transcriptome-informed filtering** 
 --- 
   The availability of an increasing number of matched proteomic and transcriptomic datasets can be exploited to reduce ambiguity of protein quantification. 
 Indeed, according to the central dogma of biology, there can be no protein without the corresponding transcript. Following this, proteins identifications
 for which the corresponding transcript is identified in the sample-matched transcriptome are more likely to be correct than protein identifications with no 
-expressed transcript.
-Based on this rationale we propose a  a transcriptome-informed post-hoc filtering strategy to reduce ambiguity of protein identifications. This strategy 
-consists in the removal of proteins whose transcript is not identified in the sample-matched transcriptome. This can be operated in two ways: 
-1. remove all proteins with no expressed transcript and all those peptides which only map on these proteins;
-2. remove only those proteins with no expressed transcript which are exclusively identified by shared peptides. 
-This latter option is more cautious as it does not cause the removal of any peptide identification and it filters out only ambiguous protein identifications (i.e. 
-proteins with shared peptides). However, it can be interesting to investigate whether peptide identifications removed using the first option are of lower quality.
----
+expressed transcript.  
+The CCs4prot package implements a transcriptome-informed filtering strategy and allows to measure the impact of the filtering on ambiguity of protein identifications.  
 
-## Install ccs4prot as an R package
 
-ccs4prot is as an **R package**. 
+## Install the CCs4prot R package
 
 Download the package with the git clone command:
 
@@ -66,7 +57,7 @@ devtools::install("CCs4prot")
 
 ## Usage
 
-To learn how to use ccs4prot, please refer to the introductory vignette posted at this link: 
+To learn how to use CCs4prot, please refer to the introductory vignette posted at this link: 
 
 * [https://github.com/laurafancello/CCs4prot/blob/main/vignettes/IntroToCCs4prot.Rmd)
 

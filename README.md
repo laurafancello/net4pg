@@ -14,8 +14,6 @@ knitr::opts_chunk$set(
 
 # Handle Ambiguity of Protein Identifications from Shotgun Proteomics  
 
- <p style="text-align: center;">[ [GitLab](https://gitlab.com/laura_fancello/ccs4prot) ] 
-</p>
 
 **Analyze ambiguous protein identifications using graph connected components (CCs)** 
 --- 

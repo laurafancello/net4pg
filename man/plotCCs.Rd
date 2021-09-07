@@ -77,7 +77,7 @@ cc.peptides.incM <- CC.composition(cc.proteins=multProteinCC$cc, incM=incM)
 subgraphCC <- plotCCs(prot="ENSP261"
         , cc.proteins=multProteinCC$ccs
         , cc.subincM=cc.peptides.incM$cc.subincM
-        , tagProt = "ENSP
+        , tagProt = "ENSP"
         , tagContam="Contam"
         , incM=incM)
 plot.igraph(subgraphCC$g,

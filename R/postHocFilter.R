@@ -2,7 +2,7 @@
 #'
 #' Implement the transcriptome-informed post-hoc filtering strategy. This strategy
 #' aims to reduce the ambiguity of protein identifications by exploiting sample-matched
-#' transcriptome information, when available. First, tt takes in input the set of
+#' transcriptome information, when available. First, it takes in input the set of
 #' transcripts expressed in the sample-matched transcriptome (reported using the
 #' transcript identifier in Ensembl format, i.e. ENSTXXXX) and removes from proteomic
 #' identifications those proteins whose transcript is not found to be expressed.

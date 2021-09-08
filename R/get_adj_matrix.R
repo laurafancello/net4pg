@@ -7,37 +7,37 @@
 #' with its column and row names (respectively, protein and peptide identifiers)
 #' names and 0 or 1 values indicating whether or not the peptide maps on the
 #' corresponding protein.
-#' @return a \code{numerical} \code{matrix} containing the adjacency matrix,
+#' @return a \code{numeric} \code{matrix} containing the adjacency matrix,
 #' with value >0 or 0 indicating whether or not two proteins are identified by
 #' shared peptide(s)
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
-#'                              , "incM_Example"
+#'                              , "incM_example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
 #' rownames_filename <- system.file( "extdata"
-#'                                   , "peptideIDs_incM_Example"
+#'                                   , "peptideIDs_incM_example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
 #' colnames_filename <- system.file( "extdata"
-#'                                  , "proteinIDs_incM_Example"
+#'                                  , "proteinIDs_incM_example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename=incM_filename
+#' incM <- read_inc_matrix(incM_filename=incM_filename
 #'                  , colnames_filename=colnames_filename
 #'                  , rownames_filename=rownames_filename)
 #' # Only retain proteins with at least one shared peptide and all peptides
 #' # mapping on such proteins.
-#' incM_reduced <- reduceIncM(incM)
+#' incM_reduced <- reduce_inc_matrix(incM)
 #' # Generate adjacency matrix describing protein-to-protein mappings
-#' adjM <- getAdjM(incM_reduced)
+#' adjM <- get_adj_matrix(incM_reduced)
 #'
 #' @author Laura Fancello
 #'
 #' @export
 #'
-getAdjM <- function(incM) {
+get_adj_matrix <- function(incM) {
 
   # Sanity Checks  ----------------------------------------------------------
   # Check input arguments

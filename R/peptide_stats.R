@@ -11,29 +11,29 @@
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
-#'                              , "incM_Example"
+#'                              , "incM_example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
 #' rownames_filename <- system.file( "extdata"
-#'                                   , "peptideIDs_incM_Example"
+#'                                   , "peptideIDs_incM_example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
 #' colnames_filename <- system.file( "extdata"
-#'                                  , "proteinIDs_incM_Example"
+#'                                  , "proteinIDs_incM_example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename = incM_filename
+#' incM <- read_inc_matrix(incM_filename = incM_filename
 #'                  , colnames_filename = colnames_filename
 #'                  , rownames_filename = rownames_filename)
 #' # Calculate percentage of shared vs specific peptides
-#' peptideStatsOut <- peptideStats(incM = incM)
+#' peptideStatsOut <- peptide_stats(incM = incM)
 #'
 #' @author Laura Fancello
 #'
 #' @export
 
 
-peptideStats <- function(incM) {
+peptide_stats <- function(incM) {
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments

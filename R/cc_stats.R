@@ -23,30 +23,30 @@
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file("extdata"
-#'                              , "incM_Example"
+#'                              , "incM_example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
 #' rownames_filename <- system.file("extdata"
-#'                                   , "peptideIDs_incM_Example"
+#'                                   , "peptideIDs_incM_example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
 #' colnames_filename <- system.file("extdata"
-#'                                  , "proteinIDs_incM_Example"
+#'                                  , "proteinIDs_incM_example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename = incM_filename
+#' incM <- read_inc_matrix(incM_filename = incM_filename
 #'                  , colnames_filename = colnames_filename
 #'                  , rownames_filename = rownames_filename)
 #' # Only retain proteins with at least one shared peptide and all peptides
 #' # mapping on such proteins.
-#' incM_reduced <- reduceIncM(incM)
+#' incM_reduced <- reduce_inc_matrix(incM)
 #' # Generate adjacency matrix describing protein-to-protein mappings
-#' adjM <- getAdjM(incM_reduced)
+#' adjM <- get_adj_matrix(incM_reduced)
 #' # Generate graph of protein-to-protein connections and calculate its
 #' # connected components
-#' multProteinCC <- getCC(adjM)
+#' multProteinCC <- get_cc(adjM)
 #' # CCs size and percentage of single-vs multi-protein CCs
-#' CCstatsOut <- CC.stats(incM = incM_reduced
+#' CCstatsOut <- cc_stats(incM = incM_reduced
 #'                       , cc.proteins = multProteinCC$ccs
 #'                       , reducedIncM = TRUE)
 #'
@@ -55,7 +55,7 @@
 #' @export
 #'
 
-CC.stats <- function(incM, cc.proteins, reducedIncM){
+cc_stats <- function(incM, cc.proteins, reducedIncM) {
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments

@@ -41,30 +41,30 @@
 #' @examples
 #' # Read the tab-delimited file containing the proteome incidence matrix
 #' incM_filename <- system.file("extdata"
-#'                              , "incM_Example"
+#'                              , "incM_example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
 #' rownames_filename <- system.file("extdata"
-#'                                   , "peptideIDs_incM_Example"
+#'                                   , "peptideIDs_incM_example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
 #' colnames_filename <- system.file("extdata"
-#'                                  , "proteinIDs_incM_Example"
+#'                                  , "proteinIDs_incM_example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename = incM_filename
+#' incM <- read_inc_matrix(incM_filename = incM_filename
 #'                  , colnames_filename = colnames_filename
 #'                  , rownames_filename = rownames_filename)
 #' # Perform transcriptome-informed post-hoc filtering
 #' exprTranscriptsFile <- system.file("extdata"
-#'                                    , "ExpressedTranscripts.txt"
+#'                                    , "expressed_transcripts.txt"
 #'                                    , package = "CCs4prot"
 #'                                    , mustWork = TRUE)
 #' transcriptToProteinFile <- system.file("extdata"
-#'                                         , "proteinToTranscript"
+#'                                         , "protein_to_transcript"
 #'                                         , package = "CCs4prot"
 #'                                         , mustWork = TRUE)
-#' incM_filtered <- postHocFilter(incM
+#' incM_filtered <- transcriptome_filter(incM
 #'                          , exprTranscriptsFile = exprTranscriptsFile
 #'                          , transcriptToProteinFile = transcriptToProteinFile
 #'                          , tagContam = "Contam"
@@ -75,7 +75,7 @@
 #' @export
 #'
 
-postHocFilter <- function(incM
+transcriptome_filter <- function(incM
                           , exprTranscriptsFile
                           , transcriptToProteinFile
                           , tagContam

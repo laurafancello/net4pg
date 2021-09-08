@@ -1,7 +1,7 @@
 utils::globalVariables(c("incM0"
                           , "cc.peptides.incM"
                           , "CCstatsOut"
-                          , "incM_Example"
+                          , "incM_example"
                           , "peptideStatsOut"
                           , "cc.multProteins")
                        , package = "CCs4prot", add = TRUE)

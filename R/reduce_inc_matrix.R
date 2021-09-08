@@ -19,29 +19,29 @@
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file("extdata"
-#'                              , "incM_Example"
+#'                              , "incM_example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
 #' rownames_filename <- system.file("extdata"
-#'                                   , "peptideIDs_incM_Example"
+#'                                   , "peptideIDs_incM_example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
 #' colnames_filename <- system.file("extdata"
-#'                                  , "proteinIDs_incM_Example"
+#'                                  , "proteinIDs_incM_example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename = incM_filename
+#' incM <- read_inc_matrix(incM_filename = incM_filename
 #'                  , colnames_filename = colnames_filename
 #'                  , rownames_filename = rownames_filename)
 #' # Only retain proteins with at least one shared peptide and all peptides
 #' # mapping on such proteins.
-#' incM_reduced <- reduceIncM(incM)
+#' incM_reduced <- reduce_inc_matrix(incM)
 #'
 #' @author Laura Fancello
 #'
 #' @export
 
-reduceIncM <- function(incM) {
+reduce_inc_matrix <- function(incM) {
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments

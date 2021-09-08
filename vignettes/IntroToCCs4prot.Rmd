@@ -83,7 +83,7 @@ The required input must be in the form of a tab-delimited incidence matrix with 
 6. [Visualize peptide-to-protein mappings for ambiguous protein identifications of interest;](#step6)  
 
 ## Read in input the incidence matrix describing peptide-to-protein mappings{#step1}
-Incidence matrices generated from proteomic datasets can be quite large but they can be easily read in input chunk by chunk using the readIncM() function.
+Incidence matrices generated from proteomic datasets can be quite large but they can be easily read in input chunk by chunk using the read_inc_matrix() function.
 This function requires three inputs:  
 * the name of the tab-delimited file containing the incidence matrix cell values - with no column or row names - (peptide-to-protein mappings);  
 * the name of the file containing protein identifiers (column names of the matrix), one per line;  
@@ -92,18 +92,18 @@ This function requires three inputs:
 Read the incidence matrix describing peptides and corresponding identified in a proteomic experiment and peptide-to-protein mapping information
 ```{r}
 incM_filename <- system.file("extdata"
-                        , "incM_Example"
+                        , "incM_example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 rownames_filename <- system.file("extdata"
-                        , "peptideIDs_incM_Example"
+                        , "peptideIDs_incM_example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 colnames_filename <- system.file("extdata"
-                        , "proteinIDs_incM_Example"
+                        , "proteinIDs_incM_example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-incM <- readIncM(incM_filename = incM_filename
+incM <- read_inc_matrix(incM_filename = incM_filename
                 , colnames_filename = colnames_filename
                 , rownames_filename = rownames_filename)
 ```
@@ -116,7 +116,7 @@ dim(incM)
 ## Reduce the size of the incidence matrix{#step2}
 In order to decrease the computational cost of calculating graph connected components, we reduce the size of the input incidence matrix by removing all proteins not sharing peptides and all peptides exclusively mapping to these proteins. Only ambiguous protein identifications are left, which is proteins connected by shared peptides and belonging to multi-protein CC.
 ```{r}
-incM_reduced <- reduceIncM(incM)
+incM_reduced <- reduce_inc_matrix(incM)
 dim(incM_reduced) # check the size of the reduced incidence matrix
 ```
   
@@ -124,20 +124,20 @@ dim(incM_reduced) # check the size of the reduced incidence matrix
 ## Calculate the adjacency matrix describing protein-to-protein connections via shared peptides{#step3}
 The adjacency matrix is calculated by cross-product of the reduced incidence matrix and it constitutes a more compact representation than an incidence matrix: it scales linearly with the number of proteins and it is independent of the number of peptides, which is convenient to speed up connected components calculation; 
 ```{r}
-adjM <- getAdjM(incM_reduced)
+adjM <- get_adj_matrix(incM_reduced)
 dim(adjM) # check the size of the adjacency matrix:
 ```
 
 ## Generate a graph of protein-to-protein connections and calculate its connected components (CCs){#step4}
 Build a graph representing protein-to-protein connections by shared peptides, as described in the adjacency matrix,
-and calculate graph connected components, using the getCC() function. 
+and calculate graph connected components, using the get_cc() function. 
 The function provides in output a list of two elements:  
 i. a graph of protein connections (by shared peptides) as described by the adjacency matrix;   
 ii. a list of vectors (one per connected component) enumerating protein members of each connected component  
 
 ```{r}
 # Calculate graph and connected components
-multProteinCC <- getCC(adjM)
+multProteinCC <- get_cc(adjM)
 
 # Check number of multi-protein connected components
 cc.multProteins <- multProteinCC$ccs
@@ -145,12 +145,12 @@ length(cc.multProteins)
 ```
 
 ## Assess the ambiguity of protein identifications based on the proportion of multi-protein CCs and shared peptides{#step5}
-The proportion of single- or multi-protein CCs and the size of multi-protein CCs represent a measure for the level of ambiguity of protein identifications and they can be obtained using the CC.stats() function.
-The above calculated CCs exclusively are multi-protein CCs since they were calculated on the reduced incidence matrix from step 2, which only contains proteins sharing at least one peptide. This is specified setting the *reducedIncM* parameter to TRUE when using the CC.stats() function. Single-protein CCs are obtained as all those proteins from the original incidence matrix which do not belong to multi-protein CCs.
+The proportion of single- or multi-protein CCs and the size of multi-protein CCs represent a measure for the level of ambiguity of protein identifications and they can be obtained using the cc_stats() function.
+The above calculated CCs exclusively are multi-protein CCs since they were calculated on the reduced incidence matrix from step 2, which only contains proteins sharing at least one peptide. This is specified setting the *reducedIncM* parameter to TRUE when using the cc_stats() function. Single-protein CCs are obtained as all those proteins from the original incidence matrix which do not belong to multi-protein CCs.
 
 ```{r}
 # CCs size and percentage of single- vs multi-protein CCs
-CCstatsOut <- CC.stats(incM = incM
+CCstatsOut <- cc_stats(incM = incM
                        , cc.proteins = cc.multProteins
                        , reducedIncM = TRUE)
 # Number of single-protein CCs:
@@ -180,9 +180,9 @@ plot(factor(CCstatsOut$NproteinsDistribution$N_proteins
 ```
 
 The proportion of specific or shared peptides also represents a measure for the level of ambiguity of protein identifications.
-It can be calculated using the peptideStats() function.
+It can be calculated using the peptide_stats() function.
 ```{r}
-peptideStatsOut <- peptideStats(incM = incM)
+peptideStatsOut <- peptide_stats(incM = incM)
 
 # Number of shared peptides
 peptideStatsOut$nbShared
@@ -205,13 +205,13 @@ i. a list of vectors enumerating peptides included in each CC;
 ii. a list of incidence  matrices (or vectors if only one peptide) describing peptide-to-protein mappings.    
 
 ```{r}
-cc.peptides.incM <- CC.composition(cc.multProteins, incM = incM)
+cc.peptides.incM <- cc_composition(cc.multProteins, incM = incM)
 ```
 
 Then plot, for the protein of interest, a bipartite graph representing the CC it belongs to:
 ```{r, fig.height=7}
 prot <- "ENSP261"
-subgraphCC <- plotCCs(prot = prot
+subgraphCC <- plot_cc(prot = prot
         , cc.proteins = cc.multProteins
         , cc.subincM = cc.peptides.incM$cc.subincM
         , incM = incM
@@ -236,7 +236,7 @@ Perform a transcriptome-informed filtering of shotgun proteomic identifications 
 
   The required input is the same as in section 2: a tab-delimited incidence matrix describing identified peptides (along the rows) and proteins they map on (along the columns). No prior protein inference should be performed, When the objective is to assess ambiguity of protein identifications directly obtained from identified peptides.  
 
-Filtering can be performed in three different ways, indicated by the 'remove' parameter of the postHocFilter() function:  
+Filtering can be performed in three different ways, indicated by the 'remove' parameter of the transcriptome_filter() function:  
 i. remove all proteins whose corresponding transcript is not expressed according to the sample-matched transcriptome; then remove all specific or shared peptides exclusively mapping on them   (parameter remove="all");  
 ii. remove proteins whose corresponding transcript is not expressed, if they are only identified by shared peptides; then remove peptides exclusively mapping on them (parameter remove="sharedOnly");  
 iii. remove proteins whose corresponding transcript is not expressed, if they are only identified by shared peptides and if those peptides are shared with at least one protein not filtered out (*i.e.* a protein whose transcript is expressed); no peptide needs to be removed (parameter remove="sharedNoRemove").  
@@ -246,18 +246,18 @@ iii. remove proteins whose corresponding transcript is not expressed, if they ar
 Read the incidence matrix describing peptides identified in a shotgun proteomic experiment and proteins they map on
 ```{r}
 incM_filename <- system.file("extdata"
-                        , "incM_Example"
+                        , "incM_example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 rownames_filename <- system.file("extdata"
-                        , "peptideIDs_incM_Example"
+                        , "peptideIDs_incM_example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 colnames_filename <- system.file("extdata"
-                        , "proteinIDs_incM_Example"
+                        , "proteinIDs_incM_example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-incM <- readIncM(incM_filename = incM_filename
+incM <- read_inc_matrix(incM_filename = incM_filename
                 , colnames_filename = colnames_filename
                 , rownames_filename = rownames_filename)
 ```
@@ -269,7 +269,7 @@ dim(incM)
 ```
 
 ## Perform transcriptome-informed filtering
-Perform transcriptome-informed post-hoc filtering using the postHocFilter() function, which requires three inputs:  
+Perform transcriptome-informed post-hoc filtering using the transcriptome_filter() function, which requires three inputs:  
   1. the name of the file containing the incidence matrix of peptide-to-protein mappings  
   2. the name of the file containing the transcripts expressed in the sample-matched transcriptome)  
   3. the name of the file containing for each protein ID the corresponding transcript ID. [^1]  
@@ -280,16 +280,16 @@ Perform transcriptome-informed post-hoc filtering using the postHocFilter() func
 ```{r}
 # Read input file names
 exprTranscriptsFile <- system.file("extdata"
-                        , "ExpressedTranscripts.txt"
+                        , "expressed_transcripts.txt"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 transcriptToProteinFile <- system.file("extdata"
-                        , "proteinToTranscript"
+                        , "protein_to_transcript"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 
 # Perform filtering
-incM_filt <- postHocFilter(incM
+incM_filt <- transcriptome_filter(incM
                             , exprTranscriptsFile = exprTranscriptsFile
                             , transcriptToProteinFile = transcriptToProteinFile
                             , tagContam = "Contam"
@@ -313,16 +313,16 @@ transcriptome-informed filtering, compared to original proteomic identifications
 Calculate CCs on the graph of proteomic identifications obtained after transcriptome-informed filtering.  
 ```{r}
 # Reduce incidence matrix size to accelerate downstream computation
-incM_filt_reduced <- reduceIncM(incM_filt)
+incM_filt_reduced <- reduce_inc_matrix(incM_filt)
 
 # Calculate the adjacency matrix describing protein-to-protein connections
-adjM_filt <- getAdjM(incM_filt_reduced)
+adjM_filt <- get_adj_matrix(incM_filt_reduced)
 dim(adjM_filt) # check the size of the adjacency matrix
 
 # Generate a graph of protein-to-protein connections by shared peptides and 
 # calculate its connected components (i.e. sets of proteins connected by shared
 # peptides
-multProteinCC_filt <- getCC(adjM_filt)
+multProteinCC_filt <- get_cc(adjM_filt)
 
 # Save the list of vectors enumerating protein members in each connected
 # component in the object cc.multProteins_filt
@@ -330,7 +330,7 @@ cc.multProteins_filt <- multProteinCC_filt$ccs
 
 # Calculate CCs size and % of single- vs multi-protein CCs obtained after
 # transcriptome-informed filtering
-CCstatsOut_filt <- CC.stats(incM = incM_filt
+CCstatsOut_filt <- cc_stats(incM = incM_filt
                                 , cc.proteins = multProteinCC_filt$ccs
                                 , reducedIncM = TRUE)
 
@@ -419,7 +419,7 @@ transcriptome-informed filtering, compared to original proteomic identifications
 
 Calculate the proportion of shared peptides versus specific peptides obtained after transcriptome-informed filtering
 ```{r}
-peptideStatsOut_filt <- peptideStats(incM = incM_filt)
+peptideStatsOut_filt <- peptide_stats(incM = incM_filt)
 ```
 
 Compare the proportion of specific versus shared peptides obtained after transcriptome-informed filtering 
@@ -450,20 +450,20 @@ Compare the CC graph before or after transcriptome-informed filtering.
 
 ```{r, fig.height=14}
 # Extract peptides and peptide-to-protein mappings for each CC after filtering
-cc.peptides.incM_filt <- CC.composition(cc.multProteins_filt
+cc.peptides.incM_filt <- cc_composition(cc.multProteins_filt
                                             , incM = incM_filt)
 
 # Generate, for the protein of interest, a bipartite graph representing the CC 
 # it belongs to, before and after transcriptome-informed filtering.
 prot <- "ENSP261"
-subgraphCC_beforeFilter <- plotCCs(prot = prot
+subgraphCC_beforeFilter <- plot_cc(prot = prot
                       , cc.proteins = cc.multProteins
                       , cc.subincM = cc.peptides.incM$cc.subincM
                       , incM = incM
                       , tagProt = "ENSP"
                       , tagContam = "Contam")
 
-subgraphCC_afterFilter <- plotCCs(prot = prot
+subgraphCC_afterFilter <- plot_cc(prot = prot
                      , cc.proteins = cc.multProteins_filt
                      , cc.subincM = cc.peptides.incM_filt$cc.subincM
                      , incM = incM_filt

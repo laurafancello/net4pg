@@ -13,45 +13,51 @@ postHocFilter(
 )
 }
 \arguments{
-\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix with
-its column and row names (respectively, protein and peptide identifiers) names
-and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-protein.}
+\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix
+with its column and row names (respectively, protein and peptide identifiers)
+and 0 or 1 values indicating whether or not the peptide maps on the
+corresponding protein.}
 
-\item{exprTranscriptsFile}{the name of the file containing the set of transcripts
-expressed in the sample-matched transcriptome (one per line). Transcript identifiers
-must be in the Ensembl format (i.e. ENSTXXX)}
+\item{exprTranscriptsFile}{the name of the file containing the set of
+transcripts expressed in the sample-matched transcriptome (one per line).
+Transcript identifiers must be in the Ensembl format (i.e., ENSTXXX for
+human)}
 
 \item{transcriptToProteinFile}{the name of a tab-delimited file with protein
 identifiers in the first column and the corresponding transcript identifiers
-in the second column. Protein and transcript identifiers must be in the Ensembl
-format (i.e. ENSPXXX and ENSTXXX)}
+in the second column. Protein and transcript identifiers must be in the
+Ensembl format (i.e. ENSPXXX and ENSTXXX for human)}
 
 \item{tagContam}{a \code{character} \code{vector} reporting the tag which
 identifies contaminant protein}
 
 \item{remove}{\code{character} \code{vector} indicating whether to remove:
-i. all proteins with no expressed transcripts and peptides exclusively mapping
-on removed proteins ("all"); ii. only those exclusively identified by shared
-peptides and peptides exclusively mapping on removed proteins ("sharedOnly");
-iii. only those exclusively identified by shared peptides, whose peptides are
-shared with at least one protein with expressed transcript, so they are not
-to be removed ("sharedNoRemove")}
+i. all proteins with no expressed transcripts and peptides exclusively
+mapping on removed proteins ("all"); ii. only those exclusively identified
+by shared peptides and peptides exclusively mapping on removed proteins
+("sharedOnly"); iii. only those exclusively identified by shared peptides,
+whose peptides are shared with at least one protein with expressed
+transcript, so they are not to be removed ("sharedNoRemove")}
 }
 \value{
-a \code{matrix} representing a filtered incidence matrix of peptide-to-protein
-mapping obtained by transcriptome-informed post-hoc filtering.
+a \code{matrix} representing a filtered incidence matrix of
+peptide-to-protein mapping obtained by transcriptome-informed filtering.
 }
 \description{
-Implement the transcriptome-informed post-hoc filtering strategy. This strategy
-aims to reduce the ambiguity of protein identifications by exploiting sample-matched
-transcriptome information, when available. First, tt takes in input the set of
-transcripts expressed in the sample-matched transcriptome (reported using the
-transcript identifier in Ensembl format, i.e. ENSTXXXX) and removes from proteomic
-identifications those proteins whose transcript is not found to be expressed.
-Optionally, it can only remove those proteins whose transcript is not expressed
-and which are only identified by shared peptides. Secondly, it removes all
-peptides exclusively mapping on removed proteins.
+Implement the transcriptome-informed post-hoc filtering strategy. This
+strategy aims to reduce the ambiguity of protein identifications by
+exploiting sample-matched transcriptome information, when available. First,
+it takes in input the set of transcripts expressed in the sample-matched
+transcriptome (reported using the transcript identifier in Ensembl format,
+i.e., ENSTXXXX for human) and removes from proteomic identifications:
+i. all proteins with no expressed transcripts and peptides exclusively
+mapping on removed proteins ("all"); or
+ii. only those exclusively identified
+by shared peptides and peptides exclusively mapping on removed proteins
+("sharedOnly"); or
+iii. only those exclusively identified by shared peptides,
+whose peptides are shared with at least one protein with expressed
+transcript, so they are not to be removed ("sharedNoRemove")
 }
 \examples{
 # Read the tab-delimited file containing the proteome incidence matrix
@@ -67,9 +73,9 @@ colnames_filename <- system.file( "extdata"
                                  , "proteinIDs_incM_Example"
                                  , package = "CCs4prot"
                                  , mustWork = TRUE)
-incM <- readIncM(incM_filename=incM_filename
-                 , colnames_filename=colnames_filename
-                 , rownames_filename=rownames_filename)
+incM <- readIncM(incM_filename = incM_filename
+                 , colnames_filename = colnames_filename
+                 , rownames_filename = rownames_filename)
 # Perform transcriptome-informed post-hoc filtering
 exprTranscriptsFile <- system.file( "extdata"
                                    , "ExpressedTranscripts.txt"
@@ -79,10 +85,11 @@ transcriptToProteinFile <- system.file( "extdata"
                                         , "proteinToTranscript"
                                         , package = "CCs4prot"
                                         , mustWork = TRUE)
-incM_filtered <- postHocFilter(incM, exprTranscriptsFile=exprTranscriptsFile
-                               , transcriptToProteinFile=transcriptToProteinFile
-                               , tagContam="Contam"
-                               , remove = "all")
+incM_filtered <- postHocFilter(incM
+                         , exprTranscriptsFile = exprTranscriptsFile
+                         , transcriptToProteinFile = transcriptToProteinFile
+                         , tagContam = "Contam"
+                         , remove = "all")
 
 }
 \author{

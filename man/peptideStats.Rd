@@ -7,17 +7,18 @@
 peptideStats(incM)
 }
 \arguments{
-\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix with
-its column and row names (respectively, protein and peptide identifiers) names
-and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-protein.}
+\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix
+with its column and row names (respectively, protein and peptide identifiers)
+and 0 or 1 values indicating whether or not the peptide maps on the
+corresponding protein.}
 }
 \value{
-a \code{list} of three elements: i. number of shared peptides; ii. number
-of specific peptides; iii. percentage of specific peptides
+a \code{list} of three elements: i. number of shared peptides;
+ii. number of specific peptides; iii. percentage of specific peptides
 }
 \description{
-Read in input the incidence matrix of peptide-to-protein mappings generated from valid proteomic identifications
+Read in input the incidence matrix of peptide-to-protein mappings generated
+from valid proteomic identifications
 }
 \examples{
 # Read the tab-delimited file containing he proteome incidence matrix
@@ -33,11 +34,11 @@ colnames_filename <- system.file( "extdata"
                                  , "proteinIDs_incM_Example"
                                  , package = "CCs4prot"
                                  , mustWork = TRUE)
-incM <- readIncM(incM_filename=incM_filename
-                 , colnames_filename=colnames_filename
-                 , rownames_filename=rownames_filename)
+incM <- readIncM(incM_filename = incM_filename
+                 , colnames_filename = colnames_filename
+                 , rownames_filename = rownames_filename)
 # Calculate percentage of shared vs specific peptides
-peptideStatsOut <- peptideStats(incM=incM)
+peptideStatsOut <- peptideStats(incM = incM)
 
 }
 \author{

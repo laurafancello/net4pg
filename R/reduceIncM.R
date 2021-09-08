@@ -1,19 +1,21 @@
 #' Reduce size of incidence matrix for downstream analyses
 #'
-#' Reduce the size of the incidence matrix describing peptide-to-protein mappings
-#' to ease downstream analyses. The original incidence matrix is reduced to only
-#' contain proteins with at least one shared peptide and all peptides mapping on
-#' such proteins. This means that only proteins ambiguously identified are retained,
-#' which is the most interesting ones when studying ambiguity of protein identifications.
-#' @param incM a \code{logical} \code{matrix} containing the incidence matrix with
-#' its column and row names (respectively, protein and peptide identifiers) names
-#' and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-#' protein.
+#' Reduce the size of the incidence matrix describing peptide-to-protein
+#' mappings to ease downstream analyses. The original incidence matrix is
+#' reduced to only contain proteins with at least one shared peptide and all
+#' peptides mapping on such proteins. This means that only proteins ambiguously
+#' identified are retained, which is the most interesting ones when studying
+#' ambiguity of protein identifications.
+#' @param incM a \code{logical} \code{matrix} containing the incidence matrix
+#' with its column and row names (respectively, protein and peptide identifiers)
+#' and 0 or 1 values indicating whether or not the peptide maps on the
+#' corresponding protein.
 #' @return a \code{logical} \code{matrix} containing a smaller incidence matrix
-#' (with column and row names respectively reporting protein and peptide identifiers)
-#' and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-#' protein. Only proteins with at least one shared peptide and all peptides mapping
-#'  on such protein are reported in such reduced incidence matrix.
+#' (with column and row names respectively reporting protein and peptide
+#' identifiers) and 0 or 1 values indicating whether or not the peptide maps on
+#' the corresponding protein. Only proteins with at least one shared peptide and
+#' all peptides mapping on such protein are reported in such reduced incidence
+#' matrix.
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
@@ -28,9 +30,9 @@
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename=incM_filename
-#'                  , colnames_filename=colnames_filename
-#'                  , rownames_filename=rownames_filename)
+#' incM <- readIncM(incM_filename = incM_filename
+#'                  , colnames_filename = colnames_filename
+#'                  , rownames_filename = rownames_filename)
 #' # Only retain proteins with at least one shared peptide and all peptides
 #' # mapping on such proteins.
 #' incM_reduced <- reduceIncM(incM)

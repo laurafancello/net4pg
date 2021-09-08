@@ -14,19 +14,20 @@ or 0 value indicating whether or not the peptide maps on the corresponding
 protein.}
 
 \item{colnames_filename}{name of the file containing incidence matrix column
-names, which are protein identifiers. The file must contain one identifier per
-line. Protein identifiers must be in Ensembl format (i.e. ENSPXXX).}
+names, which are protein identifiers. The file must contain one identifier
+per line. Protein identifiers must be in Ensembl format (i.e., ENSPXXX for
+human).}
 
 \item{rownames_filename}{name of the file containing incidence matrix row
-names, which are peptide identifiers. The file must contain one identifier per
-line. Peptide identifiers can be in any format (i.e. numeric identifiers,
+names, which are peptide identifiers. The file must contain one identifier
+per line. Peptide identifiers can be in any format (i.e. numeric identifiers,
 amino acid sequences, ...)}
 }
 \value{
 a \code{logical} \code{matrix} containing the incidence matrix with
 its column and row names (respectively, protein and peptide identifiers)
-and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-protein.
+and 0 or 1 values indicating whether or not the peptide maps on the
+corresponding protein.
 }
 \description{
 Read in input the incidence matrix of peptide-to-protein mappings generated
@@ -46,9 +47,9 @@ colnames_filename <- system.file( "extdata"
                                  , "proteinIDs_incM_Example"
                                  , package = "CCs4prot"
                                  , mustWork = TRUE)
-incM <- readIncM(incM_filename=incM_filename
-                 , colnames_filename=colnames_filename
-                 , rownames_filename=rownames_filename)
+incM <- readIncM(incM_filename = incM_filename
+                 , colnames_filename = colnames_filename
+                 , rownames_filename = rownames_filename)
 
 }
 \author{

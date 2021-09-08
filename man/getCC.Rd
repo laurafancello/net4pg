@@ -7,19 +7,19 @@
 getCC(adjM)
 }
 \arguments{
-\item{adjM}{a \code{numerical} \code{matrix} containing the adjacency matrix, with
-value >0 or 0 indicating whether or not two proteins are identified by shared
-peptide(s)}
+\item{adjM}{a \code{numerical} \code{matrix} containing the adjacency matrix,
+with value >0 or 0 indicating whether or not two proteins are identified by
+shared peptide(s)}
 }
 \value{
-a \code{list} of two elements: i. a \code{graph} representing protein-to-protein
-connections encoded by the adjacency matrix; ii. a \code{list} of \code{vectors}
-(one for each connected component) enumerating protein members of each connected
-component.
+a \code{list} of two elements: i. a \code{graph} representing
+protein-to-protein connections encoded by the adjacency matrix; ii. a
+\code{list} of \code{vectors} (one for each connected component) enumerating
+protein members of each connected component.
 }
 \description{
-Build a graph of protein-to-protein connections from adjacency matrix and calculate
-its connected components.
+Build a graph of protein-to-protein connections from adjacency matrix and
+calculate its connected components.
 }
 \examples{
 # Read the tab-delimited file containing he proteome incidence matrix
@@ -43,8 +43,8 @@ incM <- readIncM(incM_filename=incM_filename
 incM_reduced <- reduceIncM(incM)
 # Generate adjacency matrix describing protein-to-protein mappings
 adjM <- getAdjM(incM_reduced)
-# Generate graph of protein-to-protein connections and calculate its connected
-# components
+# Generate graph of protein-to-protein connections and calculate its
+# connected components
 multProteinCC <- getCC(adjM)
 
 }

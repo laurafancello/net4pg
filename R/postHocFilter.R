@@ -1,37 +1,43 @@
 #' Perform transcriptome-informed post-hoc filtering
 #'
-#' Implement the transcriptome-informed post-hoc filtering strategy. This strategy
-#' aims to reduce the ambiguity of protein identifications by exploiting sample-matched
-#' transcriptome information, when available. First, it takes in input the set of
-#' transcripts expressed in the sample-matched transcriptome (reported using the
-#' transcript identifier in Ensembl format, i.e. ENSTXXXX) and removes from proteomic
-#' identifications those proteins whose transcript is not found to be expressed.
-#' Optionally, it can only remove those proteins whose transcript is not expressed
-#' and which are only identified by shared peptides. Secondly, it removes all
-#' peptides exclusively mapping on removed proteins.
-#' @param incM a \code{logical} \code{matrix} containing the incidence matrix with
-#' its column and row names (respectively, protein and peptide identifiers) names
-#' and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-#' protein.
-#' @param exprTranscriptsFile the name of the file containing the set of transcripts
-#' expressed in the sample-matched transcriptome (one per line). Transcript identifiers
-#' must be in the Ensembl format (i.e. ENSTXXX)
+#' Implement the transcriptome-informed post-hoc filtering strategy. This
+#' strategy aims to reduce the ambiguity of protein identifications by
+#' exploiting sample-matched transcriptome information, when available. First,
+#' it takes in input the set of transcripts expressed in the sample-matched
+#' transcriptome (reported using the transcript identifier in Ensembl format,
+#' i.e., ENSTXXXX for human) and removes from proteomic identifications:
+#' i. all proteins with no expressed transcripts and peptides exclusively
+#' mapping on removed proteins ("all"); or
+#' ii. only those exclusively identified
+#' by shared peptides and peptides exclusively mapping on removed proteins
+#' ("sharedOnly"); or
+#' iii. only those exclusively identified by shared peptides,
+#' whose peptides are shared with at least one protein with expressed
+#' transcript, so they are not to be removed ("sharedNoRemove")
+#' @param incM a \code{logical} \code{matrix} containing the incidence matrix
+#' with its column and row names (respectively, protein and peptide identifiers)
+#' and 0 or 1 values indicating whether or not the peptide maps on the
+#' corresponding protein.
+#' @param exprTranscriptsFile the name of the file containing the set of
+#' transcripts expressed in the sample-matched transcriptome (one per line).
+#' Transcript identifiers must be in the Ensembl format (i.e., ENSTXXX for
+#' human)
 #' @param transcriptToProteinFile the name of a tab-delimited file with protein
 #' identifiers in the first column and the corresponding transcript identifiers
-#' in the second column. Protein and transcript identifiers must be in the Ensembl
-#' format (i.e. ENSPXXX and ENSTXXX)
+#' in the second column. Protein and transcript identifiers must be in the
+#' Ensembl format (i.e. ENSPXXX and ENSTXXX for human)
 #' @param tagContam a \code{character} \code{vector} reporting the tag which
 #' identifies contaminant protein
 #' @param remove \code{character} \code{vector} indicating whether to remove:
-#' i. all proteins with no expressed transcripts and peptides exclusively mapping
-#' on removed proteins ("all"); ii. only those exclusively identified by shared
-#' peptides and peptides exclusively mapping on removed proteins ("sharedOnly");
-#' iii. only those exclusively identified by shared peptides, whose peptides are
-#' shared with at least one protein with expressed transcript, so they are not
-#' to be removed ("sharedNoRemove")
+#' i. all proteins with no expressed transcripts and peptides exclusively
+#' mapping on removed proteins ("all"); ii. only those exclusively identified
+#' by shared peptides and peptides exclusively mapping on removed proteins
+#' ("sharedOnly"); iii. only those exclusively identified by shared peptides,
+#' whose peptides are shared with at least one protein with expressed
+#' transcript, so they are not to be removed ("sharedNoRemove")
 #' @importFrom magrittr %>%
-#' @return a \code{matrix} representing a filtered incidence matrix of peptide-to-protein
-#' mapping obtained by transcriptome-informed post-hoc filtering.
+#' @return a \code{matrix} representing a filtered incidence matrix of
+#' peptide-to-protein mapping obtained by transcriptome-informed filtering.
 #' @examples
 #' # Read the tab-delimited file containing the proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
@@ -46,9 +52,9 @@
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename=incM_filename
-#'                  , colnames_filename=colnames_filename
-#'                  , rownames_filename=rownames_filename)
+#' incM <- readIncM(incM_filename = incM_filename
+#'                  , colnames_filename = colnames_filename
+#'                  , rownames_filename = rownames_filename)
 #' # Perform transcriptome-informed post-hoc filtering
 #' exprTranscriptsFile <- system.file( "extdata"
 #'                                    , "ExpressedTranscripts.txt"
@@ -58,17 +64,22 @@
 #'                                         , "proteinToTranscript"
 #'                                         , package = "CCs4prot"
 #'                                         , mustWork = TRUE)
-#' incM_filtered <- postHocFilter(incM, exprTranscriptsFile=exprTranscriptsFile
-#'                                , transcriptToProteinFile=transcriptToProteinFile
-#'                                , tagContam="Contam"
-#'                                , remove = "all")
+#' incM_filtered <- postHocFilter(incM
+#'                          , exprTranscriptsFile = exprTranscriptsFile
+#'                          , transcriptToProteinFile = transcriptToProteinFile
+#'                          , tagContam = "Contam"
+#'                          , remove = "all")
 #'
 #' @author Laura Fancello
 #'
 #' @export
 #'
 
-postHocFilter <- function(incM, exprTranscriptsFile, transcriptToProteinFile, tagContam, remove){
+postHocFilter <- function(incM
+                          , exprTranscriptsFile
+                          , transcriptToProteinFile
+                          , tagContam
+                          , remove){
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments
@@ -103,20 +114,23 @@ postHocFilter <- function(incM, exprTranscriptsFile, transcriptToProteinFile, ta
     stop("argument 'remove' is not a character vector")
   }
   if ((remove!="all")&(remove!="sharedOnly")&(remove!="sharedNoRemove")) {
-    stop("argument 'remove' is not valid: please choose one between 'all', 'sharedOnly' and 'sharedNoRemove'")
+    stop("argument 'remove' is not valid: please choose one between 'all',
+         'sharedOnly' and 'sharedNoRemove'")
   }
 
   # Post-hoc filter  --------------------------------------------------------
   ## Read list of transcripts found to be expressed in the sample-matched transcriptome
-  exprTranscripts <- scan(file=exprTranscriptsFile, what=character())
+  exprRNA <- scan(file=exprTranscriptsFile, what=character())
 
   ## Read tab-delimited file containing Ensembl transcript ID to Ensembl protein ID
   ## conversion
-  transcriptToProtein <- utils::read.table(file=transcriptToProteinFile, sep="\t", header=F)
-  colnames(transcriptToProtein) <- c("Protein", "Transcript")
+  trans2Prot <- utils::read.table(file=transcriptToProteinFile
+                                           , sep="\t"
+                                           , header=FALSE)
+  colnames(trans2Prot) <- c("Prot", "RNA")
 
   ## Convert IDs of expressed transcript into the corresponding protein IDs
-  exprProteins <- as.character(as.vector(transcriptToProtein[transcriptToProtein$Transcript %in% exprTranscripts,]$Protein))
+  exprProts <- as.character(as.vector(trans2Prot[trans2Prot$RNA %in% exprRNA,]$Prot))
 
   ## Identify contaminant proteins
   proteinContam <- colnames(incM)[grep("Contam", colnames(incM))]
@@ -131,7 +145,7 @@ postHocFilter <- function(incM, exprTranscriptsFile, transcriptToProteinFile, ta
 
     ## Extract proteins with not expressed transcript (excluding contaminant proteins
     ## for which we do not have transcriptome information)
-    noExprProts <- setdiff(colnames(incM), c(exprProteins, proteinContam))
+    noExprProts <- setdiff(colnames(incM), c(exprProts, proteinContam))
 
     ## Remove proteins with both the following features: 1. with not expressed
     ## transcript (excluding contaminant proteins for which we do not have
@@ -146,46 +160,49 @@ postHocFilter <- function(incM, exprTranscriptsFile, transcriptToProteinFile, ta
     }
 
     ## Clean memory
-    rm(specificPep, subIncM, specificProt, onlySharedProt, noExprProts, noKeepProt, filterPeptides_index, exprTranscripts, exprProteins)
+    rm(specificPep, subIncM, specificProt, onlySharedProt, noExprProts
+       , noKeepProt, filterPeptides_index, exprRNA, exprProts)
     gc()
 
   }else{
     if(remove=="all"){
-      ## Keep only proteins with expressed transcript in sample-matched transcriptome
-      ## and contaminant proteins (which are not observed in transcriptomics when
-      ## mapping against the reference genome)
-      keepProt <- c(intersect(exprProteins, colnames(incM)), proteinContam)
+      ## Keep only proteins with expressed transcript in sample-matched
+      ## transcriptome and contaminant proteins (which are not observed in
+      ## transcriptomics when mapping against the reference genome)
+      keepProt <- c(intersect(exprProts, colnames(incM)), proteinContam)
       incM_filtered <- incM[,which(colnames(incM) %in% keepProt)]
 
-      ## Remove peptides only mapping on proteins whose transcript is NOT expressed
-      ## in the sample-matched transcriptome
+      ## Remove peptides only mapping on proteins whose transcript is NOT
+      ## expressed in the sample-matched transcriptome
       filterPeptides_index <- which(rowSums(incM_filtered)==0)
       incM_filtered <- incM_filtered[-filterPeptides_index,]
 
       ## Clean memory
-      rm(keepProt, filterPeptides_index, exprTranscripts, exprProteins)
+      rm(keepProt, filterPeptides_index, exprRNA, exprProts)
       gc()
 
     }else{
       if(remove=="sharedNoRemove"){
 
-        ## Remove proteins fulfilling the following criteria: 1. their corresponding
-        ## transcript is not expressed according to the sample-matched transcriptome;
-        ## 2. they are exclusively mapped by shared and not specific peptides; 3. their
-        ## shared peptides are also mapped on at least one protein with expressed transcript
-        ## so that they are not to be removed
+        ## Remove proteins fulfilling the following criteria: 1. their
+        ## corresponding transcript is not expressed according to the
+        ## sample-matched transcriptome; 2. they are exclusively mapped by
+        ## shared and not specific peptides; 3. their shared peptides are also
+        ##  mapped on at least one protein with expressed transcript so that
+        ## they are not to be removed
 
-        noTranscript <- setdiff(colnames(incM), c(exprProteins, proteinContam))
+        noRNA <- setdiff(colnames(incM), c(exprProts, proteinContam))
 
-        ## Simulate how incM would be filtered if all proteins with no transcripts removed
-        incM_noTranscriptFilter <- incM[,-which(colnames(incM) %in% noTranscript)]
+        ## Simulate how incM would be filtered if all proteins with no
+        ## transcripts removed
+        incM_noRNAFilter <- incM[,-which(colnames(incM) %in% noRNA)]
         ## Find peptides potentially lost
-        peptidesRemoved <- which(rowSums(incM_noTranscriptFilter)==0)
+        peptidesRemoved <- which(rowSums(incM_noRNAFilter)==0)
         ## Find proteins which peptides potentially lost map on
         prots_peptidesRemoved <- which(colSums(incM[peptidesRemoved,])>0)
-        noTranscript_keep <- colnames(incM)[prots_peptidesRemoved]
+        noRNA_keep <- colnames(incM)[prots_peptidesRemoved]
         ## Remove proteins with no transcript except for those above identified
-        noKeep <- setdiff(noTranscript, noTranscript_keep)
+        noKeep <- setdiff(noRNA, noRNA_keep)
         incM_filtered <- incM[,-which(colnames(incM) %in% noKeep)]
         }
       }

@@ -7,15 +7,15 @@
 getAdjM(incM)
 }
 \arguments{
-\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix with
-its column and row names (respectively, protein and peptide identifiers) names
-and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-protein.}
+\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix
+with its column and row names (respectively, protein and peptide identifiers)
+names and 0 or 1 values indicating whether or not the peptide maps on the
+corresponding protein.}
 }
 \value{
-a \code{numerical} \code{matrix} containing the adjacency matrix, with
-value >0 or 0 indicating whether or not two proteins are identified by shared
-peptide(s)
+a \code{numerical} \code{matrix} containing the adjacency matrix,
+with value >0 or 0 indicating whether or not two proteins are identified by
+shared peptide(s)
 }
 \description{
 Generate an adjacency matrix representing protein-to-protein connections,

@@ -8,16 +8,17 @@
 #' or 0 value indicating whether or not the peptide maps on the corresponding
 #' protein.
 #' @param colnames_filename name of the file containing incidence matrix column
-#' names, which are protein identifiers. The file must contain one identifier per
-#' line. Protein identifiers must be in Ensembl format (i.e. ENSPXXX).
+#' names, which are protein identifiers. The file must contain one identifier
+#' per line. Protein identifiers must be in Ensembl format (i.e., ENSPXXX for
+#' human).
 #' @param rownames_filename name of the file containing incidence matrix row
-#' names, which are peptide identifiers. The file must contain one identifier per
-#' line. Peptide identifiers can be in any format (i.e. numeric identifiers,
+#' names, which are peptide identifiers. The file must contain one identifier
+#' per line. Peptide identifiers can be in any format (i.e. numeric identifiers,
 #' amino acid sequences, ...)
 #' @return a \code{logical} \code{matrix} containing the incidence matrix with
 #' its column and row names (respectively, protein and peptide identifiers)
-#' and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-#' protein.
+#' and 0 or 1 values indicating whether or not the peptide maps on the
+#' corresponding protein.
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
@@ -32,9 +33,9 @@
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename=incM_filename
-#'                  , colnames_filename=colnames_filename
-#'                  , rownames_filename=rownames_filename)
+#' incM <- readIncM(incM_filename = incM_filename
+#'                  , colnames_filename = colnames_filename
+#'                  , rownames_filename = rownames_filename)
 #'
 #' @author Laura Fancello
 #'
@@ -65,11 +66,17 @@ readIncM <- function(incM_filename, colnames_filename, rownames_filename){
 
   # Read incidence matrix  --------------------------------------------------
   ## Read column names (protein IDs)
-  proteinIDs <- data.table::fread(file=colnames_filename, sep="\n", header=F, data.table=FALSE)
+  proteinIDs <- data.table::fread(file = colnames_filename
+                                  , sep = "\n"
+                                  , header = FALSE
+                                  , data.table = FALSE)
   proteinIDs <- proteinIDs$V1
 
   ## Read row names (peptide IDs)
-  peptideIDs <- data.table::fread(file=rownames_filename, sep="\n", header=F, data.table=FALSE)
+  peptideIDs <- data.table::fread(file = rownames_filename
+                                  , sep = "\n"
+                                  , header = FALSE
+                                  , data.table = FALSE)
   peptideIDs <- peptideIDs$V1
 
   ## Read incidence matrix values
@@ -93,13 +100,13 @@ readIncM <- function(incM_filename, colnames_filename, rownames_filename){
       print(paste0("chunk: ", chunk))
 
       # Read sub-matrix (chunk)
-      incM_tmp <- data.table::fread(file=incM_filename
-                        , sep="\t"
-                        , header=F
-                        , data.table=F
-                        , skip=skip
-                        , nrows=chunk)
-      assign(paste("incM", skip, sep=""), (incM_tmp))
+      incM_tmp <- data.table::fread(file = incM_filename
+                        , sep = "\t"
+                        , header = FALSE
+                        , data.table = FALSE
+                        , skip = skip
+                        , nrows = chunk)
+      assign(paste("incM", skip, sep = ""), (incM_tmp))
       skip <- skip + chunk
 
     }
@@ -112,25 +119,30 @@ readIncM <- function(incM_filename, colnames_filename, rownames_filename){
     rm(incM0)
     gc()
     incM <- as.matrix(incM)
-    incM <- apply(incM, 2, as.logical) # convert to logical to save memory space
+    ## Convert to logical to save memory space
+    incM <- apply(incM, 2, as.logical)
 
-    chunk=10000
+    chunk <- 10000
     for(i in 1:(cycles-1)){
       incM_toadd <- get(paste0("incM",(i*chunk)))
-      rm(list=paste0("incM",(i*chunk)))
+      rm(list <- paste0("incM",(i*chunk)))
       incM_toadd <- as.matrix(incM_toadd)
-      incM_toadd <- apply(incM_toadd, 2, as.logical) # convert to logical to save
-      # memory space
+      ## Convert to logical to save memory space
+      incM_toadd <- apply(incM_toadd, 2, as.logical)
       incM <- rbind(incM, incM_toadd)
     }
 
-    rm(incM_toadd, cycles, chunk, skip, i, nbLines)   # clean memory
+    ## Clean memory
+    rm(incM_toadd, cycles, chunk, skip, i, nbLines)
     gc()
 
   }else{  ## If not big matrix read it all at once
 
     ## Read incidence matrix
-    incM <- data.table::fread(file=incM_filename, sep="\t", header=F, data.table=F)
+    incM <- data.table::fread(file = incM_filename
+                              , sep = "\t"
+                              , header = FALSE
+                              , data.table = FALSE)
     incM <- as.matrix(incM)
     incM <- apply(incM, 2, as.logical)
   }

@@ -1,12 +1,13 @@
 #' Calculate percentage of shared vs specific peptides
 #'
-#' Read in input the incidence matrix of peptide-to-protein mappings generated from valid proteomic identifications
-#' @param incM a \code{logical} \code{matrix} containing the incidence matrix with
-#' its column and row names (respectively, protein and peptide identifiers) names
-#' and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-#' protein.
-#' @return a \code{list} of three elements: i. number of shared peptides; ii. number
-#' of specific peptides; iii. percentage of specific peptides
+#' Read in input the incidence matrix of peptide-to-protein mappings generated
+#' from valid proteomic identifications
+#' @param incM a \code{logical} \code{matrix} containing the incidence matrix
+#' with its column and row names (respectively, protein and peptide identifiers)
+#' and 0 or 1 values indicating whether or not the peptide maps on the
+#' corresponding protein.
+#' @return a \code{list} of three elements: i. number of shared peptides;
+#' ii. number of specific peptides; iii. percentage of specific peptides
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
@@ -21,11 +22,11 @@
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
-#' incM <- readIncM(incM_filename=incM_filename
-#'                  , colnames_filename=colnames_filename
-#'                  , rownames_filename=rownames_filename)
+#' incM <- readIncM(incM_filename = incM_filename
+#'                  , colnames_filename = colnames_filename
+#'                  , rownames_filename = rownames_filename)
 #' # Calculate percentage of shared vs specific peptides
-#' peptideStatsOut <- peptideStats(incM=incM)
+#' peptideStatsOut <- peptideStats(incM = incM)
 #'
 #' @author Laura Fancello
 #'
@@ -47,8 +48,10 @@ peptideStats <- function(incM){
   totPeptides <- dim(incM)[1]
   nbSpecific <- length(which(rowSums(incM)==1))
   nbShared <- totPeptides-nbSpecific
-  percSpecific <- paste0(round(nbSpecific/totPeptides*100, digits=2), "%")
+  percSpecific <- paste0(round(nbSpecific/totPeptides*100, digits = 2), "%")
 
-  return(list(nbShared=nbShared, nbSpecific=nbSpecific, percSpecific=percSpecific))
+  return(list(nbShared = nbShared
+              , nbSpecific = nbSpecific
+              , percSpecific = percSpecific))
 
 }

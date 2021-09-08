@@ -60,7 +60,7 @@ other by a path and not connected to any other of the vertices in the supergraph
 
 
     
-```{r message=FALSE, include=FALSE}
+```{r message = FALSE, include = FALSE}
 library(CCs4prot)
 library(igraph)
 library(ggplot2)
@@ -152,7 +152,7 @@ The above calculated CCs exclusively are multi-protein CCs since they were calcu
 # CCs size and percentage of single- vs multi-protein CCs
 CCstatsOut <- CC.stats(incM = incM
                        , cc.proteins = cc.multProteins
-                       , reducedIncM = T)
+                       , reducedIncM = TRUE)
 # Number of single-protein CCs:
 CCstatsOut$N_singleProtCC
 
@@ -164,7 +164,7 @@ totCCs <- CCstatsOut$N_singleProtCC+CCstatsOut$N_multiProtCC
 totCCs
 
 # Percentage of single-protein CCs:
-PercSingleP <- round(CCstatsOut$N_singleProtCC/totCCs*100, digits=2)
+PercSingleP <- round(CCstatsOut$N_singleProtCC/totCCs*100, digits = 2)
 PercSingleP
 
 # View table of CC size distribution
@@ -182,7 +182,7 @@ plot(factor(CCstatsOut$NproteinsDistribution$N_proteins
 The proportion of specific or shared peptides also represents a measure for the level of ambiguity of protein identifications.
 It can be calculated using the peptideStats() function.
 ```{r}
-peptideStatsOut <- peptideStats(incM=incM)
+peptideStatsOut <- peptideStats(incM = incM)
 
 # Number of shared peptides
 peptideStatsOut$nbShared
@@ -217,15 +217,16 @@ subgraphCC <- plotCCs(prot = prot
         , incM = incM
         , tagProt = "ENSP"
         , tagContam = "Contam")
- plot.igraph(subgraphCC$g, layout = layout_as_bipartite,
-       edge.width = 1,
-       edge.arrow.width = 0.3,
-       vertex.size = 35,
-       edge.arrow.size = 0.5,
-       vertex.size2 = 35,
-       vertex.label.cex = 1,
-       asp = 0.25,
-       margin = -0.1) +
+ plot.igraph(subgraphCC$g
+            , layout = layout_as_bipartite
+            , edge.width = 1
+            ,  edge.arrow.width = 0.3
+            , vertex.size = 35
+            , edge.arrow.size = 0.5
+            , vertex.size2 = 35
+            , vertex.label.cex = 1
+            , asp = 0.25
+            , margin = -0.1) +
 title(paste0("Protein ", prot, " in CC#", subgraphCC$cc_id), line = -1)
 ```
 
@@ -331,7 +332,7 @@ cc.multProteins_filt <- multProteinCC_filt$ccs
 # transcriptome-informed filtering
 CCstatsOut_filt <- CC.stats(incM = incM_filt
                                 , cc.proteins = multProteinCC_filt$ccs
-                                , reducedIncM = T)
+                                , reducedIncM = TRUE)
 
 # Number of single-protein CCs
 CCstatsOut_filt$N_singleProtCC
@@ -345,7 +346,7 @@ totCCs_filt
 
 # Percentage of single-protein CCs
 PercSingleP_filt <- round(CCstatsOut_filt$N_singleProtCC/totCCs_filt*100
-                          , digits=2)
+                          , digits = 2)
 
 # View table of CC size distribution
 CCstatsOut_filt$NproteinsDistribution
@@ -470,30 +471,32 @@ subgraphCC_afterFilter <- plotCCs(prot = prot
 
 # Plot
 par(mfrow=c(2,1))
-plot.igraph(subgraphCC_beforeFilter$g, layout = layout_as_bipartite,
-      edge.width = 1,
-      edge.arrow.width = 0.3,
-      vertex.size = 35,
-      edge.arrow.size = 0.5,
-      vertex.size2 = 35,
-      vertex.label.cex = 1,
-      asp = 0.45,
-      margin = -0.1) +
+plot.igraph(subgraphCC_beforeFilter$g
+            , layout = layout_as_bipartite
+            , edge.width = 1
+            , edge.arrow.width = 0.3
+            , vertex.size = 35
+            , edge.arrow.size = 0.5
+            , vertex.size2 = 35
+            , vertex.label.cex = 1
+            , asp = 0.45
+            , margin = -0.1) +
 title(paste0("Protein "
              , prot
              , " in CC #"
              , subgraphCC_beforeFilter$cc_id
              , " before filtering")
       , line = -1)
-plot.igraph(subgraphCC_afterFilter$g, layout = layout_as_bipartite,
-      edge.width = 1,
-      edge.arrow.width = 0.3,
-      vertex.size = 35,
-      edge.arrow.size = 0.5,
-      vertex.size2 = 35,
-      vertex.label.cex = 1,
-      asp = 0.45,
-      margin = -0.1) +
+plot.igraph(subgraphCC_afterFilter$g
+            , layout = layout_as_bipartite
+            , edge.width = 1
+            , edge.arrow.width = 0.3
+            , vertex.size = 35
+            , edge.arrow.size = 0.5
+            , vertex.size2 = 35
+            , vertex.label.cex = 1
+            , asp = 0.45
+            , margin = -0.1) +
 title(paste0("Protein "
              , prot, " in CC #"
              , subgraphCC_beforeFilter$cc_id

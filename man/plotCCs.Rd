@@ -4,44 +4,46 @@
 \alias{plotCCs}
 \title{Plot peptide-to-protein mapping graph}
 \usage{
-plotCCs(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM = incM)
+plotCCs(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM)
 }
 \arguments{
-\item{prot}{a \code{character} \code{vector} containing a single Ensembl identifier
-(i.e. ENSPXXX for human, ENSMUSPXXX for mouse) of the protein of interest.}
+\item{prot}{a \code{character} \code{vector} containing a single Ensembl
+identifier (i.e. ENSPXXX for human, ENSMUSPXXX for mouse) of the protein of
+interest.}
 
 \item{cc.proteins}{a \code{list} of \code{vectors} (one for each connected
 component) containing protein members of each connected component.}
 
 \item{cc.subincM}{a \code{list} of \code{matrices} or \code{vectors} (one for
-each connected component) representing the incidence matrix of peptide-to-protein
-mappings for each connected component; a list element is a vector or a matrix
-if respectively only one peptide or multiple peptides identify proteins of that
-connected component}
+each connected component) representing the incidence matrix of
+peptide-to-protein mappings for each connected component; matrices are used
+if multiple peptides identify protein members of that connected component,
+vectors if only a single peptide.}
 
-\item{tagProt}{a \code{character} \code{vector} reporting the prefix of protein
-identifiers (for non contaminant proteins)}
+\item{tagProt}{a \code{character} \code{vector} reporting the prefix of
+protein identifiers (for non contaminant proteins)}
 
 \item{tagContam}{a \code{character} \code{vector} reporting the tag which
 identifies contaminant proteins}
 
-\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix with
-its column and row names (respectively, protein and peptide identifiers) names
-and 0 or 1 values indicating whether or not the peptide maps on the corresponding
-protein.}
+\item{incM}{a \code{logical} \code{matrix} containing the incidence matrix
+with its column and row names (respectively, protein and peptide identifiers)
+names and 0 or 1 values indicating whether or not the peptide maps on the
+corresponding protein.}
 }
 \value{
-a list of four elements: i. CC identifier; ii. protein members of the CC;
-iii. peptide members of the CC; iv. bipartite subgraph representing peptide-to-protein
-mapping of that CC (if multi-protein CC)
+a list of four elements: i. CC identifier; ii. protein members of the
+CC; iii. peptide members of the CC; iv. bipartite subgraph representing
+peptide-to-protein mapping of that CC (if multi-protein CC)
 }
 \description{
 Plot a bipartite subgraph representing the connected component to which the
-user-selected protein belongs. Peptide-to-protein mappings of that protein and
-of all other proteins belonging to the same CC are represented. The function
-takes in input a single Ensembl protein identifier (i.e. ENSPXXX for human,
-ENSMUSPXXX for mouse), it identifies the connected component it belongs to
-and plots all peptide-to-protein mappings of that connected component.
+user-selected protein belongs. Peptide-to-protein mappings of that protein
+and of all other proteins belonging to the same CC are represented. The
+function takes in input a single Ensembl protein identifier (i.e. ENSPXXX
+for human, ENSMUSPXXX for mouse), it identifies the connected component it
+belongs to and plots all peptide-to-protein mappings of that connected
+component.
 }
 \examples{
 library(igraph)
@@ -58,22 +60,26 @@ colnames_filename <- system.file( "extdata"
                                  , "proteinIDs_incM_Example"
                                  , package = "CCs4prot"
                                  , mustWork = TRUE)
-incM <- readIncM(incM_filename=incM_filename
-                 , colnames_filename=colnames_filename
-                 , rownames_filename=rownames_filename)
+incM <- readIncM(incM_filename = incM_filename
+                 , colnames_filename = colnames_filename
+                 , rownames_filename = rownames_filename)
 # Only retain proteins with at least one shared peptide and all peptides
 # mapping on such proteins.
 incM_reduced <- reduceIncM(incM)
 # Generate adjacency matrix describing protein-to-protein mappings
 adjM <- getAdjM(incM_reduced)
-# Generate graph of protein-to-protein connections and calculate its connected
-# components
+# Generate graph of protein-to-protein connections and calculate its
+# connected components
 multProteinCC <- getCC(adjM)
-# For each connected component, extract peptides mapping on its protein members
-# and the subset of the incidence matrix describing peptide-to-protein mapping
-cc.peptides.incM <- CC.composition(cc.proteins=multProteinCC$cc, incM=incM)
-# Plot bipartite graph representing peptide-to-protein mappings for the connected
-# component of the protein of interest (in the example protein "ENSP00000407375")
+# For each connected component, extract peptides mapping on its protein
+# members and the subset of the incidence matrix describing
+# peptide-to-protein mappings
+cc.peptides.incM <- CC.composition(cc.proteins = multProteinCC$cc
+                                   , incM = incM)
+# Plot bipartite graph representing peptide-to-protein mappings for the
+# connected component of the protein of interest (in this toy example protein
+# "ENSP261"; note that identifiers are not authentic but made up for the
+# example)
 subgraphCC <- plotCCs(prot="ENSP261"
         , cc.proteins=multProteinCC$ccs
         , cc.subincM=cc.peptides.incM$cc.subincM

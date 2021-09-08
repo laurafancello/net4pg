@@ -55,7 +55,7 @@ Distributed under the GPL-3 License.
 
 
 ## Contact
-<hr />
+
 Laura Fancello - laura.fancello@cea.fr  
 Thomas.Burger - thomas.burger@cea.fr
 

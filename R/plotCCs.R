@@ -70,16 +70,16 @@
 #'         , tagProt = "ENSP"
 #'         , tagContam="Contam"
 #'         , incM=incM)
-#' plot.igraph(subgraphCC$g,
-#'       layout = layout_as_bipartite,
-#'       edge.width = 1,
-#'       edge.arrow.width = 0.3,
-#'       vertex.size = 10,
-#'       edge.arrow.size = 0.5,
-#'       vertex.size2 = 3,
-#'       vertex.label.cex = 0.8,
-#'       asp = 0.35,
-#'       margin = -0.1) +
+#' plot.igraph(subgraphCC$g
+#'       , layout = layout_as_bipartite
+#'       , edge.width = 1
+#'       , edge.arrow.width = 0.3
+#'       , vertex.size = 10
+#'       , edge.arrow.size = 0.5
+#'       , vertex.size2 = 3
+#'       , vertex.label.cex = 0.8
+#'       , asp = 0.35
+#'       , margin = -0.1) +
 #' title(paste0("Protein ENSP261 in CC #", subgraphCC$cc_id), line = -1)
 #'
 #' @author Laura Fancello

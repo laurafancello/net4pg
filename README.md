@@ -1,5 +1,4 @@
 ## Handle Ambiguity of Protein Identifications from Shotgun Proteomics  
-<hr />
 
 ### Analyze ambiguous protein identifications using graph connected components (CCs) #
 <div style="text-align: justify"> 
@@ -24,7 +23,6 @@ The CCs4prot package implements a transcriptome-informed filtering strategy to r
   
   
 ## Install the CCs4prot R package
-<hr />
 
 Download the package with the git clone command:
 
@@ -41,7 +39,6 @@ devtools::install("CCs4prot")
 
 
 ## Usage
-<hr />
 
 To learn how to use CCs4prot, please refer to the introductory vignette posted at this link: 
 
@@ -50,7 +47,7 @@ To learn how to use CCs4prot, please refer to the introductory vignette posted a
   
   
 ## License
-<hr />
+
 Distributed under the GPL-3 License. 
 
 

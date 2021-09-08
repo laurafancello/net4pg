@@ -48,19 +48,19 @@ readIncM <- function(incM_filename, colnames_filename, rownames_filename){
   if (is.null(incM_filename)) {
     stop("argument 'incM_filename' is missing, with no default")
   }
-  if (!((methods::is(incM_filename)[1] == "character")|(methods::is(incM_filename)[2] == "vector"))) {
+  if (!((methods::is(incM_filename)[1] == "character") | (methods::is(incM_filename)[2] == "vector"))) {
     stop("argument 'incM_filename' is not a character vector")
   }
   if (is.null(colnames_filename)) {
     stop("argument 'colnames_filename' is missing, with no default")
   }
-  if (!((methods::is(colnames_filename)[1] == "character")|(methods::is(colnames_filename)[2] == "vector"))) {
+  if (!((methods::is(colnames_filename)[1] == "character") | (methods::is(colnames_filename)[2] == "vector"))) {
     stop("argument 'colnames_filename' is not a character vector")
   }
   if (is.null(rownames_filename)) {
     stop("argument 'rownames_filename' is missing, with no default")
   }
-  if (!((methods::is(rownames_filename)[1] == "character")|(methods::is(rownames_filename)[2] == "vector"))) {
+  if (!((methods::is(rownames_filename)[1] == "character") | (methods::is(rownames_filename)[2] == "vector"))) {
     stop("argument 'rownames_filename' is not a character vector")
   }
 
@@ -83,16 +83,16 @@ readIncM <- function(incM_filename, colnames_filename, rownames_filename){
   nbLines <- length(peptideIDs) # nb rows of incidence matrix
 
   ## If big matrix (more than 1000 rows) read it chunk by chunk
-  if(nbLines > 10000){
+  if(nbLines > 10000) {
 
     chunk <- 10000
     skip <- 0
-    cycles <- ceiling(nbLines/chunk) # set the number of chunks to read matrix
+    cycles <- ceiling(nbLines / chunk) # set the number of chunks to read matrix
 
-    for(i in 1:cycles){
+    for(i in 1:cycles) {
 
-      if(i==cycles){
-        chunk <- nbLines-(chunk*(cycles-1))
+      if(i == cycles) {
+        chunk <- nbLines - (chunk * (cycles - 1))
       }
 
       print(paste0("cycle: ", i))
@@ -123,9 +123,9 @@ readIncM <- function(incM_filename, colnames_filename, rownames_filename){
     incM <- apply(incM, 2, as.logical)
 
     chunk <- 10000
-    for(i in 1:(cycles-1)){
-      incM_toadd <- get(paste0("incM",(i*chunk)))
-      rm(list <- paste0("incM",(i*chunk)))
+    for(i in 1:(cycles - 1)) {
+      incM_toadd <- get(paste0("incM", (i * chunk)))
+      rm(list <- paste0("incM", (i * chunk)))
       incM_toadd <- as.matrix(incM_toadd)
       ## Convert to logical to save memory space
       incM_toadd <- apply(incM_toadd, 2, as.logical)

@@ -18,15 +18,15 @@
 #' matrix.
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
-#' incM_filename <- system.file( "extdata"
+#' incM_filename <- system.file("extdata"
 #'                              , "incM_Example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
-#' rownames_filename <- system.file( "extdata"
+#' rownames_filename <- system.file("extdata"
 #'                                   , "peptideIDs_incM_Example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
-#' colnames_filename <- system.file( "extdata"
+#' colnames_filename <- system.file("extdata"
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
@@ -41,7 +41,7 @@
 #'
 #' @export
 
-reduceIncM <- function(incM){
+reduceIncM <- function(incM) {
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments
@@ -54,22 +54,22 @@ reduceIncM <- function(incM){
 
   # Reduce incidence matrix  --------------------------------------------------
   ## First remove peptides only pointing to one protein (specific peptides)
-  incM_RowFilter <- incM[-which(rowSums(incM)==1),]
+  incM_RowFilter <- incM[-which(rowSums(incM) == 1), ]
 
   ## Probably useful only for smaller toy datasets where it can occur that only
   ## one peptide is left
-  if(methods::is(incM_RowFilter)[2]=="vector"){
+  if(methods::is(incM_RowFilter)[2] == "vector"){
     incM_RowFilter <- t(as.matrix(incM_RowFilter))
-    rownames(incM_RowFilter) <- rownames(incM)[which(rowSums(incM)>1)]
+    rownames(incM_RowFilter) <- rownames(incM)[which(rowSums(incM) > 1)]
   }
 
   ## Then remove proteins with 0 peptides (which is proteins only identified by
   ## specific peptides, removed on previous step)
-  incM_RowColFilter <- incM_RowFilter[,-which(colSums(incM_RowFilter)==0)]
+  incM_RowColFilter <- incM_RowFilter[, -which(colSums(incM_RowFilter) == 0)]
 
   ## Probably useful only for smalle toy datasets where it can occur that only
   ## one peptide is left
-  if(methods::is(incM_RowColFilter)[2]=="vector"){
+  if(methods::is(incM_RowColFilter)[2] == "vector") {
     incM_RowColFilter <- t(as.matrix(incM_RowColFilter))
     rownames(incM_RowColFilter) <- rownames(incM_RowFilter)
   }

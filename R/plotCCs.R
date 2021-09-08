@@ -90,53 +90,53 @@ plotCCs <- function(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM){
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments
-  if(is.null(prot)) {
+  if (is.null(prot)) {
     stop("argument 'prot' is missing, with no default")
   }
-  if(!((methods::is(prot)[1] == "character")&(methods::is(prot)[2] == "vector"))) {
+  if (!((methods::is(prot)[1] == "character")  &(methods::is(prot)[2] == "vector"))) {
     stop("argument 'prot' is not a character vector")
   }
-  if(length(prot)>1) {
+  if (length(prot) > 1) {
     stop("argument 'prot' longer than 1: please give in input a single protein
          identifier")
   }
-  if((length(grep(tagProt, prot))==0)&(length(grep(tagContam, prot))==0)) {
+  if ((length(grep(tagProt, prot)) == 0) & (length(grep(tagContam, prot)) == 0)) {
     stop("argument 'prot' is not a valid contaminant protein identifier: please
          give in input a correct Ensembl or contaminant protein identifier
          (i.e. ENSPXXX or protein with tagContam)")
   }
-  if(length(grep(prot, colnames(incM)))==0) {
+  if (length(grep(prot, colnames(incM))) == 0) {
     stop("argument 'prot' is not a protein identifier from the incidence matrix
          provided in input")
   }
 
-  if(is.null(cc.proteins)) {
+  if (is.null(cc.proteins)) {
     stop("argument 'cc.proteins' is missing, with no default")
   }
-  if(!(methods::is(cc.proteins)[1] == "list")) {
+  if (!(methods::is(cc.proteins)[1] == "list")) {
     stop("argument 'cc.proteins' is not a list")
   }
 
-  if(is.null(cc.subincM)) {
+  if (is.null(cc.subincM)) {
     stop("argument 'cc.subincM' is missing, with no default")
   }
-  if(!(methods::is(cc.subincM)[1] == "list")) {
+  if (!(methods::is(cc.subincM)[1] == "list")) {
     stop("argument 'cc.subincM' is not a list")
   }
 
-  if(is.null(tagProt)) {
+  if (is.null(tagProt)) {
     stop("argument 'tagProt' is missing, with no default: please provide the
         prefix of protein identifiers (for non contaminant proteins")
   }
 
-  if(is.null(tagContam)) {
+  if (is.null(tagContam)) {
     stop("argument 'tagContam' is missing, with no default: please provide the
          tag identifying contaminant proteins")
   }
-  if(!((methods::is(tagContam)[1] == "character")&(methods::is(tagContam)[2] == "vector"))) {
+  if (!((methods::is(tagContam)[1] == "character") & (methods::is(tagContam)[2] == "vector"))) {
     stop("argument 'tagContam' is not a character vector")
   }
-  if(length(tagContam)>1) {
+  if (length(tagContam) > 1) {
     stop("argument 'tagContam' longer than 1: only one single tag allowed for
          protein contaminants")
   }
@@ -147,10 +147,10 @@ plotCCs <- function(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM){
   cc_id <- which(unlist(lapply(res, function(x) length(x) > 0)))
   result <- list()
 
-  if(length(cc_id)==0){
+  if (length(cc_id) == 0) {
     print(paste0("Protein ", prot, " is member of a single-protein CC"))
     index_prot <- grep(prot, colnames(incM))
-    peptides <- rownames(incM)[which(incM[,index_prot]==TRUE)]
+    peptides <- rownames(incM)[which(incM[, index_prot]==TRUE)]
     result$cc_id <- "single-prot"
     result$proteins <- prot
     result$peptides <- peptides
@@ -159,16 +159,16 @@ plotCCs <- function(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM){
     g <- igraph::graph_from_data_frame(edges
                                        , directed = FALSE
                                        , vertices = c(peptides, prot))
-    igraph::V(g)$type <- rep(F, length(names(as.list(igraph::V(g)))))
-    igraph::V(g)$type[grep(tagProt,names(as.list(igraph::V(g))))] <- TRUE
-    igraph::V(g)$type[grep(tagContam,names(as.list(igraph::V(g))))] <- TRUE
+    igraph::V(g)$type <- rep(FALSE, length(names(as.list(igraph::V(g)))))
+    igraph::V(g)$type[grep(tagProt, names(as.list(igraph::V(g))))] <- TRUE
+    igraph::V(g)$type[grep(tagContam, names(as.list(igraph::V(g))))] <- TRUE
   }else{
     print(paste0("Protein ", prot, " is member of a multi-protein CC"))
     ## Generate bipartite graph of peptide-to-protein mappings
     g <- igraph::graph_from_incidence_matrix(cc.subincM[cc_id][[1]])
     result$cc_id <- cc_id
-    proteins <- as.character(as.vector(c(names(igraph::V(g)[grep(tagProt,names(as.list(igraph::V(g))))])))
-                             ,  names(igraph::V(g)[grep(tagContam,names(as.list(igraph::V(g))))]))
+    proteins <- as.character(as.vector(c(names(igraph::V(g)[grep(tagProt, names(as.list(igraph::V(g))))])))
+                             ,  names(igraph::V(g)[grep(tagContam, names(as.list(igraph::V(g))))]))
     result$proteins <- proteins
     result$peptides <- setdiff(names(as.list(igraph::V(g))), proteins)
   }
@@ -178,9 +178,9 @@ plotCCs <- function(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM){
   # Blue peptide vertices
   igraph::V(g)$color <- rep("#0072B2", length(names(as.list(igraph::V(g)))))
   # Orange protein vertices
-  igraph::V(g)$color[grep(tagProt,names(as.list(igraph::V(g))))] <- "#D55E00"
+  igraph::V(g)$color[grep(tagProt, names(as.list(igraph::V(g))))] <- "#D55E00"
   # Orange contaminant protein vertices
-  igraph::V(g)$color[grep(tagContam,names(as.list(igraph::V(g))))] <- "#D55E00"
+  igraph::V(g)$color[grep(tagContam, names(as.list(igraph::V(g))))] <- "#D55E00"
   # Output
   result$g <- g
   return(result)

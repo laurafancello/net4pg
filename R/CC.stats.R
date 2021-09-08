@@ -22,15 +22,15 @@
 #' components per number of protein members)
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
-#' incM_filename <- system.file( "extdata"
+#' incM_filename <- system.file("extdata"
 #'                              , "incM_Example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
-#' rownames_filename <- system.file( "extdata"
+#' rownames_filename <- system.file("extdata"
 #'                                   , "peptideIDs_incM_Example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
-#' colnames_filename <- system.file( "extdata"
+#' colnames_filename <- system.file("extdata"
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
@@ -86,7 +86,7 @@ CC.stats <- function(incM, cc.proteins, reducedIncM){
   N_prots_N_CCs$N_proteins <- as.numeric(as.vector(N_prots_N_CCs$N_proteins))
 
   ## Number of single-protein connected components
-  if(isTRUE(reducedIncM)){
+  if (isTRUE(reducedIncM)) {
 
     `%notin%` <- Negate(`%in%`)
     indexes_singleProtCC <- which(colnames(incM) %notin% unlist(cc.proteins))
@@ -96,19 +96,19 @@ CC.stats <- function(incM, cc.proteins, reducedIncM){
     N_prots_N_CCs <- rbind(N_prots_N_CCs, c(1, N_singleProtCC))
 
   }else{
-    N_singleProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins==1,]$N_CCs)
-    N_multiProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins>1,]$N_CCs)
+    N_singleProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins == 1, ]$N_CCs)
+    N_multiProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins>1, ]$N_CCs)
     N_prots_N_CCs <- rbind(N_prots_N_CCs, c(1, N_singleProtCC))
   }
 
   ## Number connected components with 1, 2, ..., 10, >10 proteins
-  proteins <- as.data.frame(c(1,2,3,4,5,6,7,8,9,10))
+  proteins <- as.data.frame(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
   colnames(proteins) <- "N_proteins"
   NprotsDistrib <- merge(proteins, N_prots_N_CCs
                                  , by = "N_proteins"
-                                 , all.x = T)
+                                 , all.x = TRUE)
   NprotsDistrib[is.na(NprotsDistrib)] <- 0
-  over10prot <- c(">10", sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins>10,]$N_CCs))
+  over10prot <- c(">10", sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins > 10,]$N_CCs))
   NprotsDistrib <- rbind(NprotsDistrib, over10prot)
 
 

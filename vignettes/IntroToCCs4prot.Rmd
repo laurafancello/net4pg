@@ -91,15 +91,15 @@ This function requires three inputs:
 
 Read the incidence matrix describing peptides and corresponding identified in a proteomic experiment and peptide-to-protein mapping information
 ```{r}
-incM_filename <- system.file( "extdata"
+incM_filename <- system.file("extdata"
                         , "incM_Example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-rownames_filename <- system.file( "extdata"
+rownames_filename <- system.file("extdata"
                         , "peptideIDs_incM_Example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-colnames_filename <- system.file( "extdata"
+colnames_filename <- system.file("extdata"
                         , "proteinIDs_incM_Example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
@@ -172,7 +172,7 @@ CCstatsOut$NproteinsDistribution
 
 # Plot CC size distribution
 plot(factor(CCstatsOut$NproteinsDistribution$N_proteins
-          , levels = c("1","2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
+          , levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
      , as.numeric(as.vector(CCstatsOut$NproteinsDistribution$N_CC))
      , type = "s"
      , xlab = "N_proteins"
@@ -245,15 +245,15 @@ iii. remove proteins whose corresponding transcript is not expressed, if they ar
 
 Read the incidence matrix describing peptides identified in a shotgun proteomic experiment and proteins they map on
 ```{r}
-incM_filename <- system.file( "extdata"
+incM_filename <- system.file("extdata"
                         , "incM_Example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-rownames_filename <- system.file( "extdata"
+rownames_filename <- system.file("extdata"
                         , "peptideIDs_incM_Example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-colnames_filename <- system.file( "extdata"
+colnames_filename <- system.file("extdata"
                         , "proteinIDs_incM_Example"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
@@ -278,20 +278,20 @@ Perform transcriptome-informed post-hoc filtering using the postHocFilter() func
 `cat Homo_sapiens.GRCh38.pep.all.fa | grep ">" | awk -F ' ' '{print $1,$5}' | sed 's/>//g' | sed 's/transcript://g' | sed 's/ /\t/' >>  transcriptToProteinIDs_GRCh38.txt`
 
 ```{r}
-# Read input file names 
-exprTranscriptsFile <- system.file( "extdata"
+# Read input file names
+exprTranscriptsFile <- system.file("extdata"
                         , "ExpressedTranscripts.txt"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-transcriptToProteinFile <- system.file( "extdata"
+transcriptToProteinFile <- system.file("extdata"
                         , "proteinToTranscript"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
 
 # Perform filtering
 incM_filt <- postHocFilter(incM
-                            , exprTranscriptsFile=exprTranscriptsFile
-                            , transcriptToProteinFile=transcriptToProteinFile
+                            , exprTranscriptsFile = exprTranscriptsFile
+                            , transcriptToProteinFile = transcriptToProteinFile
                             , tagContam = "Contam"
                             , remove = "sharedOnly")
 
@@ -315,16 +315,16 @@ Calculate CCs on the graph of proteomic identifications obtained after transcrip
 # Reduce incidence matrix size to accelerate downstream computation
 incM_filt_reduced <- reduceIncM(incM_filt)
 
-# Calculate the adjacency matrix describing protein-to-protein connections 
+# Calculate the adjacency matrix describing protein-to-protein connections
 adjM_filt <- getAdjM(incM_filt_reduced)
 dim(adjM_filt) # check the size of the adjacency matrix
 
 # Generate a graph of protein-to-protein connections by shared peptides and 
 # calculate its connected components (i.e. sets of proteins connected by shared
-#peptides
+# peptides
 multProteinCC_filt <- getCC(adjM_filt)
 
-# Save the list of vectors enumerating protein members in each connected 
+# Save the list of vectors enumerating protein members in each connected
 # component in the object cc.multProteins_filt
 cc.multProteins_filt <- multProteinCC_filt$ccs
 
@@ -353,7 +353,7 @@ CCstatsOut_filt$NproteinsDistribution
 
 # Plot CC size distribution
 plot(factor(CCstatsOut_filt$NproteinsDistribution$N_proteins
-          , levels = c("1","2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
+          , levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
      , as.numeric(as.vector(CCstatsOut_filt$NproteinsDistribution$N_CC))
      , type = "s"
      , xlab = "N_proteins"
@@ -375,7 +375,7 @@ ggplot(data = comp
       theme_classic() +
       xlab("") +
       ylab("% single-prot CCs") +
-      ylim(0,100) +
+      ylim(0, 100) +
       coord_flip() +
       geom_text(aes(label = as.numeric(as.vector(Perc_SingleP)))
                 , hjust = 1.5, color = "white", size = 4)
@@ -384,11 +384,11 @@ ggplot(data = comp
 Plot CC size distribution before and after transcriptome-informed filtering.
 ```{r}
 ymax <- max(max(as.numeric(as.vector(CCstatsOut$NproteinsDistribution$N_CC)))
-        ,max(as.numeric(as.vector(CCstatsOut_filt$NproteinsDistribution$N_CC))))
+        , max(as.numeric(as.vector(CCstatsOut_filt$NproteinsDistribution$N_CC))))
 
-par(mfrow=c(1,2))
+par(mfrow = c(1, 2))
 plot(factor(CCstatsOut$NproteinsDistribution$N_proteins
-          , levels = c("1","2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
+          , levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
       , as.numeric(as.vector(CCstatsOut$NproteinsDistribution$N_CC))
       , type = "s"
       , xlab = "N_proteins"
@@ -396,7 +396,7 @@ plot(factor(CCstatsOut$NproteinsDistribution$N_proteins
       , ylim = c(0, ymax)
       , main = "before filtering")
 plot(factor(CCstatsOut_filt$NproteinsDistribution$N_proteins
-      , levels = c("1","2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
+      , levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", ">10"))
       , as.numeric(as.vector(CCstatsOut_filt$NproteinsDistribution$N_CC))
       , type = "s"
       , xlab = "N_proteins"
@@ -432,12 +432,13 @@ comp <- as.data.frame(cbind(
 colnames(comp) <- c("Filter", "Perc_sharedPeptides")
 
 ggplot(data = comp
-    , aes(x = as.factor(Filter), y = as.numeric(as.vector(Perc_sharedPeptides)))) +
+    , aes(x = as.factor(Filter)
+          , y = as.numeric(as.vector(Perc_sharedPeptides)))) +
       geom_bar(stat = "identity") +
       theme_classic() +
       xlab("") +
       ylab("% shared peptides") +
-      ylim(0,100) +
+      ylim(0, 100) +
       coord_flip() +
       geom_text(aes(label = as.numeric(as.vector(Perc_sharedPeptides)))
                 , hjust = 1.5, color = "white", size = 4)
@@ -454,7 +455,7 @@ cc.peptides.incM_filt <- CC.composition(cc.multProteins_filt
 
 # Generate, for the protein of interest, a bipartite graph representing the CC 
 # it belongs to, before and after transcriptome-informed filtering.
-prot="ENSP261"
+prot <- "ENSP261"
 subgraphCC_beforeFilter <- plotCCs(prot = prot
                       , cc.proteins = cc.multProteins
                       , cc.subincM = cc.peptides.incM$cc.subincM
@@ -467,10 +468,10 @@ subgraphCC_afterFilter <- plotCCs(prot = prot
                      , cc.subincM = cc.peptides.incM_filt$cc.subincM
                      , incM = incM_filt
                      , tagProt = "ENSP"
-                     , tagContam = "Contam") 
+                     , tagContam = "Contam")
 
 # Plot
-par(mfrow=c(2,1))
+par(mfrow = c(2, 1))
 plot.igraph(subgraphCC_beforeFilter$g
             , layout = layout_as_bipartite
             , edge.width = 1

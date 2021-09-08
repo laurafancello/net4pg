@@ -20,15 +20,15 @@
 #' vectors if only a single peptide.
 #' @examples
 #' # Read the tab-delimited file containing he proteome incidence matrix
-#' incM_filename <- system.file( "extdata"
+#' incM_filename <- system.file("extdata"
 #'                              , "incM_Example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
-#' rownames_filename <- system.file( "extdata"
+#' rownames_filename <- system.file("extdata"
 #'                                   , "peptideIDs_incM_Example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
-#' colnames_filename <- system.file( "extdata"
+#' colnames_filename <- system.file("extdata"
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
@@ -73,19 +73,19 @@ CC.composition <- function(cc.proteins, incM){
   # Peptides and peptide-to-protein mappings per connected component  --------
   cc.peptides <- list()
   cc.subincM <- list()
-  for(i in seq_along(cc.proteins)){
+  for (i in seq_along(cc.proteins)) {
     proteinlist <- cc.proteins[[i]]
     subX <- incM[,which(colnames(incM) %in% proteinlist)]
-    cc.peptides[[i]] <- names(which(rowSums(subX)!=0))
-    cc.subincM[[i]] <- subX[which(rowSums(subX)!=0),]
-    if(methods::is(cc.subincM[[i]])[2]=="vector"){
+    cc.peptides[[i]] <- names(which(rowSums(subX) != 0))
+    cc.subincM[[i]] <- subX[which(rowSums(subX) != 0),]
+    if (methods::is(cc.subincM[[i]])[2] == "vector") {
       cc.subincM[[i]] <- t(as.matrix(cc.subincM[[i]]))
       rownames(cc.subincM[[i]]) <- cc.peptides[[i]]
     }
   }
 
   ## Clean memory
-  rm(proteinlist,subX,i)
+  rm(proteinlist, subX, i)
   gc()
 
   ## Return output

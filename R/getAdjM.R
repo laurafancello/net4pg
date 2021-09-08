@@ -37,7 +37,7 @@
 #'
 #' @export
 #'
-getAdjM <- function(incM){
+getAdjM <- function(incM) {
 
   # Sanity Checks  ----------------------------------------------------------
   # Check input arguments
@@ -54,13 +54,13 @@ getAdjM <- function(incM){
   adjM <- Matrix::crossprod(incM)
   ## If adjM more than 1000 rows convert ngCMatrix into matrix chunk by chunk
   nbLines <- dim(incM)[1] # nb rows of incidence matrix
-  if(nbLines > 10000){
-    SplitSizeCols <- round(dim(adjM)[2]/5)
-    adjM1 <- as.matrix(adjM[,1:SplitSizeCols])
-    adjM2 <- as.matrix(adjM[,(SplitSizeCols+1):(SplitSizeCols*2)])
-    adjM3 <- as.matrix(adjM[,((SplitSizeCols*2)+1):(SplitSizeCols*3)])
-    adjM4 <- as.matrix(adjM[,((SplitSizeCols*3)+1):(SplitSizeCols*4)])
-    adjM5 <- as.matrix(adjM[,((SplitSizeCols*4)+1):dim(adjM)[2]])
+  if (nbLines > 10000) {
+    SplitSizeCols <- round(dim(adjM)[2] / 5)
+    adjM1 <- as.matrix(adjM[, 1 : SplitSizeCols])
+    adjM2 <- as.matrix(adjM[, (SplitSizeCols + 1) : (SplitSizeCols * 2)])
+    adjM3 <- as.matrix(adjM[, ((SplitSizeCols * 2) + 1) : (SplitSizeCols * 3)])
+    adjM4 <- as.matrix(adjM[, ((SplitSizeCols * 3) + 1) : (SplitSizeCols * 4)])
+    adjM5 <- as.matrix(adjM[, ((SplitSizeCols * 4) + 1) : dim(adjM)[2]])
     adjM <- cbind(adjM1, adjM2, adjM3, adjM4, adjM5)
     rm(adjM1, adjM2, adjM3, adjM4, adjM5, SplitSizeCols) # clean memory
     gc()
@@ -69,7 +69,7 @@ getAdjM <- function(incM){
   }
   ## Replace all values on diagonal (representing a protein's connection with
   ## itself) by 0. This allows to have a sparser matrix and speed up the code.
-  diag(adjM) <- rep(FALSE,length(diag(adjM)))
+  diag(adjM) <- rep(FALSE, length(diag(adjM)))
 
   ## Put back colnames and rownames
   rownames(adjM) <- colnamesIncM

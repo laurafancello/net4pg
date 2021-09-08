@@ -40,15 +40,15 @@
 #' peptide-to-protein mapping obtained by transcriptome-informed filtering.
 #' @examples
 #' # Read the tab-delimited file containing the proteome incidence matrix
-#' incM_filename <- system.file( "extdata"
+#' incM_filename <- system.file("extdata"
 #'                              , "incM_Example"
 #'                              , package = "CCs4prot"
 #'                              , mustWork = TRUE)
-#' rownames_filename <- system.file( "extdata"
+#' rownames_filename <- system.file("extdata"
 #'                                   , "peptideIDs_incM_Example"
 #'                                   , package = "CCs4prot"
 #'                                   , mustWork = TRUE)
-#' colnames_filename <- system.file( "extdata"
+#' colnames_filename <- system.file("extdata"
 #'                                  , "proteinIDs_incM_Example"
 #'                                  , package = "CCs4prot"
 #'                                  , mustWork = TRUE)
@@ -56,11 +56,11 @@
 #'                  , colnames_filename = colnames_filename
 #'                  , rownames_filename = rownames_filename)
 #' # Perform transcriptome-informed post-hoc filtering
-#' exprTranscriptsFile <- system.file( "extdata"
+#' exprTranscriptsFile <- system.file("extdata"
 #'                                    , "ExpressedTranscripts.txt"
 #'                                    , package = "CCs4prot"
 #'                                    , mustWork = TRUE)
-#' transcriptToProteinFile <- system.file( "extdata"
+#' transcriptToProteinFile <- system.file("extdata"
 #'                                         , "proteinToTranscript"
 #'                                         , package = "CCs4prot"
 #'                                         , mustWork = TRUE)
@@ -79,7 +79,7 @@ postHocFilter <- function(incM
                           , exprTranscriptsFile
                           , transcriptToProteinFile
                           , tagContam
-                          , remove){
+                          , remove) {
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments
@@ -92,55 +92,55 @@ postHocFilter <- function(incM
   if (is.null(exprTranscriptsFile)) {
     stop("argument 'exprTranscriptsFile' is missing, with no default")
   }
-  if (!((methods::is(exprTranscriptsFile)[1] == "character")|(methods::is(exprTranscriptsFile)[2] == "vector"))) {
+  if (!((methods::is(exprTranscriptsFile)[1] == "character") | (methods::is(exprTranscriptsFile)[2] == "vector"))) {
     stop("argument 'exprTranscriptsFile' is not a character vector")
   }
   if (is.null(transcriptToProteinFile)) {
     stop("argument 'transcriptToProteinFile' is missing, with no default")
   }
-  if (!((methods::is(transcriptToProteinFile)[1] == "character")|(methods::is(transcriptToProteinFile)[2] == "vector"))) {
+  if (!((methods::is(transcriptToProteinFile)[1] == "character") | (methods::is(transcriptToProteinFile)[2] == "vector"))) {
     stop("argument 'transcriptToProteinFile' is not a character vector")
   }
   if (is.null(tagContam)) {
     stop("argument 'tagContam' is missing, with no default")
   }
-  if ((!(methods::is(tagContam)[1] == "character")|(!(methods::is(tagContam)[2] == "vector")))) {
+  if ((!(methods::is(tagContam)[1] == "character") | (!(methods::is(tagContam)[2] == "vector")))) {
     stop("argument 'tagContam' is not a character vector")
   }
   if (is.null(remove)) {
     stop("argument 'remove' is missing, with no default")
   }
-  if ((!(methods::is(remove)[1] == "character")|(!(methods::is(remove)[2] == "vector")))) {
+  if ((!(methods::is(remove)[1] == "character") | (!(methods::is(remove)[2] == "vector")))) {
     stop("argument 'remove' is not a character vector")
   }
-  if ((remove!="all")&(remove!="sharedOnly")&(remove!="sharedNoRemove")) {
+  if ((remove != "all") & (remove != "sharedOnly") & (remove != "sharedNoRemove")) {
     stop("argument 'remove' is not valid: please choose one between 'all',
          'sharedOnly' and 'sharedNoRemove'")
   }
 
   # Post-hoc filter  --------------------------------------------------------
   ## Read list of transcripts found to be expressed in the sample-matched transcriptome
-  exprRNA <- scan(file=exprTranscriptsFile, what=character())
+  exprRNA <- scan(file = exprTranscriptsFile, what = character())
 
   ## Read tab-delimited file containing Ensembl transcript ID to Ensembl protein ID
   ## conversion
   trans2Prot <- utils::read.table(file=transcriptToProteinFile
-                                           , sep="\t"
-                                           , header=FALSE)
+                                           , sep = "\t"
+                                           , header = FALSE)
   colnames(trans2Prot) <- c("Prot", "RNA")
 
   ## Convert IDs of expressed transcript into the corresponding protein IDs
-  exprProts <- as.character(as.vector(trans2Prot[trans2Prot$RNA %in% exprRNA,]$Prot))
+  exprProts <- as.character(as.vector(trans2Prot[trans2Prot$RNA %in% exprRNA, ]$Prot))
 
   ## Identify contaminant proteins
   proteinContam <- colnames(incM)[grep("Contam", colnames(incM))]
 
-  if(remove=="sharedOnly"){
+  if (remove=="sharedOnly") {
     ## Extract specific peptides
-    specificPep <- which(rowSums(incM)==1)
+    specificPep <- which(rowSums(incM) == 1)
     ## Extract proteins with specific peptides
-    subIncM <- incM[specificPep,]
-    specificProt <- colnames(subIncM[,which(colSums(subIncM)>0)])
+    subIncM <- incM[specificPep, ]
+    specificProt <- colnames(subIncM[, which(colSums(subIncM) > 0)])
     onlySharedProt <- setdiff(colnames(incM), specificProt)
 
     ## Extract proteins with not expressed transcript (excluding contaminant proteins
@@ -151,12 +151,12 @@ postHocFilter <- function(incM
     ## transcript (excluding contaminant proteins for which we do not have
     ## transcriptome information) AND 2. with no specific peptide
     noKeepProt <- intersect(noExprProts, onlySharedProt)
-    incM_filtered <- incM[,-which(colnames(incM) %in% noKeepProt)]
+    incM_filtered <- incM[, -which(colnames(incM) %in% noKeepProt)]
 
     ## Remove peptides only mapping on removed proteins
-    filterPeptides_index <- which(rowSums(incM_filtered)==0)
-    if(length(filterPeptides_index)>0){
-      incM_filtered <- incM_filtered[-filterPeptides_index,]
+    filterPeptides_index <- which(rowSums(incM_filtered) == 0)
+    if(length(filterPeptides_index) > 0){
+      incM_filtered <- incM_filtered[-filterPeptides_index, ]
     }
 
     ## Clean memory
@@ -165,24 +165,24 @@ postHocFilter <- function(incM
     gc()
 
   }else{
-    if(remove=="all"){
+    if (remove == "all") {
       ## Keep only proteins with expressed transcript in sample-matched
       ## transcriptome and contaminant proteins (which are not observed in
       ## transcriptomics when mapping against the reference genome)
       keepProt <- c(intersect(exprProts, colnames(incM)), proteinContam)
-      incM_filtered <- incM[,which(colnames(incM) %in% keepProt)]
+      incM_filtered <- incM[, which(colnames(incM) %in% keepProt)]
 
       ## Remove peptides only mapping on proteins whose transcript is NOT
       ## expressed in the sample-matched transcriptome
-      filterPeptides_index <- which(rowSums(incM_filtered)==0)
-      incM_filtered <- incM_filtered[-filterPeptides_index,]
+      filterPeptides_index <- which(rowSums(incM_filtered) == 0)
+      incM_filtered <- incM_filtered[-filterPeptides_index, ]
 
       ## Clean memory
       rm(keepProt, filterPeptides_index, exprRNA, exprProts)
       gc()
 
     }else{
-      if(remove=="sharedNoRemove"){
+      if (remove == "sharedNoRemove") {
 
         ## Remove proteins fulfilling the following criteria: 1. their
         ## corresponding transcript is not expressed according to the
@@ -195,15 +195,15 @@ postHocFilter <- function(incM
 
         ## Simulate how incM would be filtered if all proteins with no
         ## transcripts removed
-        incM_noRNAFilter <- incM[,-which(colnames(incM) %in% noRNA)]
+        incM_noRNAFilter <- incM[, -which(colnames(incM) %in% noRNA)]
         ## Find peptides potentially lost
-        peptidesRemoved <- which(rowSums(incM_noRNAFilter)==0)
+        peptidesRemoved <- which(rowSums(incM_noRNAFilter) == 0)
         ## Find proteins which peptides potentially lost map on
-        prots_peptidesRemoved <- which(colSums(incM[peptidesRemoved,])>0)
+        prots_peptidesRemoved <- which(colSums(incM[peptidesRemoved, ]) > 0)
         noRNA_keep <- colnames(incM)[prots_peptidesRemoved]
         ## Remove proteins with no transcript except for those above identified
         noKeep <- setdiff(noRNA, noRNA_keep)
-        incM_filtered <- incM[,-which(colnames(incM) %in% noKeep)]
+        incM_filtered <- incM[, -which(colnames(incM) %in% noKeep)]
         }
       }
     }

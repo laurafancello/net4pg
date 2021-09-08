@@ -39,7 +39,7 @@
 #'
 #' @export
 #'
-getCC <- function(adjM){
+getCC <- function(adjM) {
 
   # Sanity Checks  ----------------------------------------------------------
   ## Check input arguments
@@ -52,13 +52,13 @@ getCC <- function(adjM){
 
   # Calculate graph and its connected components  --------------------------
   ## Generate graph
-  g <- graph::graphAM(adjM, edgemode='undirected', values=NA)
+  g <- graph::graphAM(adjM, edgemode = 'undirected', values = NA)
 
   ## Calculate connected components
   ccs <- graph::connComp(methods::as(g, 'graphNEL'))
 
   ## Return output
-  result <- list(g=g, ccs=ccs)
+  result <- list(g = g, ccs = ccs)
   return(result)
 
 }

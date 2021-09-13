@@ -160,11 +160,11 @@ CCstatsOut$N_singleProtCC
 CCstatsOut$N_multiProtCC
 
 # Total number of CCs
-totCCs <- CCstatsOut$N_singleProtCC+CCstatsOut$N_multiProtCC
+totCCs <- CCstatsOut$N_singleProtCC + CCstatsOut$N_multiProtCC
 totCCs
 
 # Percentage of single-protein CCs:
-PercSingleP <- round(CCstatsOut$N_singleProtCC/totCCs*100, digits = 2)
+PercSingleP <- round(CCstatsOut$N_singleProtCC / totCCs * 100, digits = 2)
 PercSingleP
 
 # View table of CC size distribution
@@ -274,7 +274,7 @@ Perform transcriptome-informed post-hoc filtering using the transcriptome_filter
   2. the name of the file containing the transcripts expressed in the sample-matched transcriptome)  
   3. the name of the file containing for each protein ID the corresponding transcript ID. [^1]  
 
-[^1]: It can be easily obtained from the Ensembl FASTA protein sequence database files (*i.e.*, Homo_sapiens.GRCh38.pep.all.fa for the human genome assembly GRCh38), publicly available at https://www.ensembl.org/info/data/ftp/index.html. The following bash command generates a tab-delimited file containing proteinID and corresponding transcriptID:
+[^1]: It can be easily obtained from the Ensembl FASTA protein sequence database files (*i.e.*, Homo_sapiens.GRCh38.pep.all.fa for the human genome assembly GRCh38), publicly available on Ensembl. The following bash command generates a tab-delimited file containing proteinID and corresponding transcriptID:
 `cat Homo_sapiens.GRCh38.pep.all.fa | grep ">" | awk -F ' ' '{print $1,$5}' | sed 's/>//g' | sed 's/transcript://g' | sed 's/ /\t/' >>  transcriptToProteinIDs_GRCh38.txt`
 
 ```{r}
@@ -319,7 +319,7 @@ incM_filt_reduced <- reduce_inc_matrix(incM_filt)
 adjM_filt <- get_adj_matrix(incM_filt_reduced)
 dim(adjM_filt) # check the size of the adjacency matrix
 
-# Generate a graph of protein-to-protein connections by shared peptides and 
+# Generate a graph of protein-to-protein connections by shared peptides and
 # calculate its connected components (i.e. sets of proteins connected by shared
 # peptides
 multProteinCC_filt <- get_cc(adjM_filt)
@@ -341,11 +341,11 @@ CCstatsOut_filt$N_singleProtCC
 CCstatsOut_filt$N_multiProtCC
 
 # Total number of CCs
-totCCs_filt <- CCstatsOut_filt$N_singleProtCC+CCstatsOut_filt$N_multiProtCC
+totCCs_filt <- CCstatsOut_filt$N_singleProtCC + CCstatsOut_filt$N_multiProtCC
 totCCs_filt
 
 # Percentage of single-protein CCs
-PercSingleP_filt <- round(CCstatsOut_filt$N_singleProtCC/totCCs_filt*100
+PercSingleP_filt <- round(CCstatsOut_filt$N_singleProtCC / totCCs_filt * 100
                           , digits = 2)
 
 # View table of CC size distribution
@@ -453,7 +453,7 @@ Compare the CC graph before or after transcriptome-informed filtering.
 cc.peptides.incM_filt <- cc_composition(cc.multProteins_filt
                                             , incM = incM_filt)
 
-# Generate, for the protein of interest, a bipartite graph representing the CC 
+# Generate, for the protein of interest, a bipartite graph representing the CC
 # it belongs to, before and after transcriptome-informed filtering.
 prot <- "ENSP261"
 subgraphCC_beforeFilter <- plot_cc(prot = prot

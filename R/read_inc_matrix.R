@@ -83,15 +83,15 @@ read_inc_matrix <- function(incM_filename, colnames_filename, rownames_filename)
   nbLines <- length(peptideIDs) # nb rows of incidence matrix
 
   ## If big matrix (more than 1000 rows) read it chunk by chunk
-  if(nbLines > 10000) {
+  if (nbLines > 10000) {
 
     chunk <- 10000
     skip <- 0
     cycles <- ceiling(nbLines / chunk) # set the number of chunks to read matrix
 
-    for(i in 1:cycles) {
+    for (i in 1:cycles) {
 
-      if(i == cycles) {
+      if (i == cycles) {
         chunk <- nbLines - (chunk * (cycles - 1))
       }
 
@@ -123,7 +123,7 @@ read_inc_matrix <- function(incM_filename, colnames_filename, rownames_filename)
     incM <- apply(incM, 2, as.logical)
 
     chunk <- 10000
-    for(i in 1:(cycles - 1)) {
+    for (i in 1:(cycles - 1)) {
       incM_toadd <- get(paste0("incM", (i * chunk)))
       rm(list <- paste0("incM", (i * chunk)))
       incM_toadd <- as.matrix(incM_toadd)

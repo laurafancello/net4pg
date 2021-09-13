@@ -93,7 +93,7 @@ plot_cc <- function(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM) {
   if (is.null(prot)) {
     stop("argument 'prot' is missing, with no default")
   }
-  if (!((methods::is(prot)[1] == "character")  &(methods::is(prot)[2] == "vector"))) {
+  if (!((methods::is(prot)[1] == "character") & (methods::is(prot)[2] == "vector"))) {
     stop("argument 'prot' is not a character vector")
   }
   if (length(prot) > 1) {
@@ -150,7 +150,7 @@ plot_cc <- function(prot, cc.proteins, cc.subincM, tagProt, tagContam, incM) {
   if (length(cc_id) == 0) {
     print(paste0("Protein ", prot, " is member of a single-protein CC"))
     index_prot <- grep(prot, colnames(incM))
-    peptides <- rownames(incM)[which(incM[, index_prot]==TRUE)]
+    peptides <- rownames(incM)[which(incM[, index_prot] == TRUE)]
     result$cc_id <- "single-prot"
     result$proteins <- prot
     result$peptides <- peptides

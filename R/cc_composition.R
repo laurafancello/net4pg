@@ -75,9 +75,9 @@ cc_composition <- function(cc.proteins, incM) {
   cc.subincM <- list()
   for (i in seq_along(cc.proteins)) {
     proteinlist <- cc.proteins[[i]]
-    subX <- incM[,which(colnames(incM) %in% proteinlist)]
+    subX <- incM[, which(colnames(incM) %in% proteinlist)]
     cc.peptides[[i]] <- names(which(rowSums(subX) != 0))
-    cc.subincM[[i]] <- subX[which(rowSums(subX) != 0),]
+    cc.subincM[[i]] <- subX[which(rowSums(subX) != 0), ]
     if (methods::is(cc.subincM[[i]])[2] == "vector") {
       cc.subincM[[i]] <- t(as.matrix(cc.subincM[[i]]))
       rownames(cc.subincM[[i]]) <- cc.peptides[[i]]

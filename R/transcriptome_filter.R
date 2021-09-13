@@ -124,7 +124,7 @@ transcriptome_filter <- function(incM
 
   ## Read tab-delimited file containing Ensembl transcript ID to Ensembl protein ID
   ## conversion
-  trans2Prot <- utils::read.table(file=transcriptToProteinFile
+  trans2Prot <- utils::read.table(file = transcriptToProteinFile
                                            , sep = "\t"
                                            , header = FALSE)
   colnames(trans2Prot) <- c("Prot", "RNA")
@@ -135,7 +135,7 @@ transcriptome_filter <- function(incM
   ## Identify contaminant proteins
   proteinContam <- colnames(incM)[grep("Contam", colnames(incM))]
 
-  if (remove=="sharedOnly") {
+  if (remove == "sharedOnly") {
     ## Extract specific peptides
     specificPep <- which(rowSums(incM) == 1)
     ## Extract proteins with specific peptides
@@ -155,7 +155,7 @@ transcriptome_filter <- function(incM
 
     ## Remove peptides only mapping on removed proteins
     filterPeptides_index <- which(rowSums(incM_filtered) == 0)
-    if(length(filterPeptides_index) > 0){
+    if (length(filterPeptides_index) > 0){
       incM_filtered <- incM_filtered[-filterPeptides_index, ]
     }
 

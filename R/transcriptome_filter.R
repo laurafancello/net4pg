@@ -22,7 +22,7 @@
 #' transcripts expressed in the sample-matched transcriptome (one per line).
 #' Transcript identifiers must be in the Ensembl format (i.e., ENSTXXX for
 #' human)
-#' @param transcriptToProteinFile the name of a tab-delimited file with protein
+#' @param proteinToTranscriptFile the name of a tab-delimited file with protein
 #' identifiers in the first column and the corresponding transcript identifiers
 #' in the second column. Protein and transcript identifiers must be in the
 #' Ensembl format (i.e. ENSPXXX and ENSTXXX for human)
@@ -60,13 +60,13 @@
 #'                                    , "expressed_transcripts.txt"
 #'                                    , package = "CCs4prot"
 #'                                    , mustWork = TRUE)
-#' transcriptToProteinFile <- system.file("extdata"
+#' protein2transcriptFile <- system.file("extdata"
 #'                                         , "protein_to_transcript"
 #'                                         , package = "CCs4prot"
 #'                                         , mustWork = TRUE)
 #' incM_filtered <- transcriptome_filter(incM
 #'                          , exprTranscriptsFile = exprTranscriptsFile
-#'                          , transcriptToProteinFile = transcriptToProteinFile
+#'                          , proteinToTranscriptFile = protein2transcriptFile
 #'                          , tagContam = "Contam"
 #'                          , remove = "all")
 #'
@@ -77,7 +77,7 @@
 
 transcriptome_filter <- function(incM
                           , exprTranscriptsFile
-                          , transcriptToProteinFile
+                          , proteinToTranscriptFile
                           , tagContam
                           , remove) {
 
@@ -95,11 +95,11 @@ transcriptome_filter <- function(incM
   if (!((methods::is(exprTranscriptsFile)[1] == "character") | (methods::is(exprTranscriptsFile)[2] == "vector"))) {
     stop("argument 'exprTranscriptsFile' is not a character vector")
   }
-  if (is.null(transcriptToProteinFile)) {
-    stop("argument 'transcriptToProteinFile' is missing, with no default")
+  if (is.null(proteinToTranscriptFile)) {
+    stop("argument 'proteinToTranscriptFile' is missing, with no default")
   }
-  if (!((methods::is(transcriptToProteinFile)[1] == "character") | (methods::is(transcriptToProteinFile)[2] == "vector"))) {
-    stop("argument 'transcriptToProteinFile' is not a character vector")
+  if (!((methods::is(proteinToTranscriptFile)[1] == "character") | (methods::is(proteinToTranscriptFile)[2] == "vector"))) {
+    stop("argument 'proteinToTranscriptFile' is not a character vector")
   }
   if (is.null(tagContam)) {
     stop("argument 'tagContam' is missing, with no default")
@@ -124,7 +124,7 @@ transcriptome_filter <- function(incM
 
   ## Read tab-delimited file containing Ensembl transcript ID to Ensembl protein ID
   ## conversion
-  trans2Prot <- utils::read.table(file=transcriptToProteinFile
+  trans2Prot <- utils::read.table(file = proteinToTranscriptFile
                                            , sep = "\t"
                                            , header = FALSE)
   colnames(trans2Prot) <- c("Prot", "RNA")
@@ -135,7 +135,7 @@ transcriptome_filter <- function(incM
   ## Identify contaminant proteins
   proteinContam <- colnames(incM)[grep("Contam", colnames(incM))]
 
-  if (remove=="sharedOnly") {
+  if (remove == "sharedOnly") {
     ## Extract specific peptides
     specificPep <- which(rowSums(incM) == 1)
     ## Extract proteins with specific peptides
@@ -155,7 +155,7 @@ transcriptome_filter <- function(incM
 
     ## Remove peptides only mapping on removed proteins
     filterPeptides_index <- which(rowSums(incM_filtered) == 0)
-    if(length(filterPeptides_index) > 0){
+    if (length(filterPeptides_index) > 0){
       incM_filtered <- incM_filtered[-filterPeptides_index, ]
     }
 

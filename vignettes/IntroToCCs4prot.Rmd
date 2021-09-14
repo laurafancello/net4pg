@@ -42,19 +42,19 @@ presence of shared peptides, which can generate quite complex peptide-to-protein
 mapping structures. These structures can be efficiently represented using bipartite graphs, with peptides
 and proteins as vertices and with edges featuring peptide to protein membership. Ambiguity in protein identifications can be assessed using graph connected 
 components (CCs), *i.e.*, the largest subgraphs in which any two vertices are connected to each 
-other by a path and not connected to any other of the vertices in the supergraph. Proteins sharing one or more peptides are gathered in the same CC (multi-protein CCs), while proteins exclusively identified by specific peptides represent CCs with a single protein vertex (single-protein CCs). The proportion of multi-protein CCs and their size (*i.e.*, number of protein members) can be used as a measure of the ambiguity of protein identifications.   
+other by a path and not connected to any other of the vertices in the supergraph. Proteins sharing one or more peptides are gathered in the same CC (multi-protein CCs), while proteins exclusively identified by specific peptides represent CCs with a single protein vertex (single-protein CCs). The proportion of multi-protein CCs and their size (*i.e.*, number of protein members) can be used to measure the level of ambiguity of protein identifications.   
 
-  Nowadays, an increasing number of sample-matched proteomic and transcriptomic datasets is available, which can be exploited to deal with ambiguity of protein identifications. Indeed, according to the central dogma of biology, there can be no protein without the corresponding transcript, so that protein identifications for which the corresponding transcript is identified in the sample-matched transcriptome are more likely to be correct than protein identifications with no expressed transcript.
+  Nowadays, an increasing number of sample-matched proteomic and transcriptomic datasets is available, which can be exploited to deal with ambiguity of protein identifications. Indeed, according to the central dogma of biology, there can be no protein without the corresponding transcript. Hence,  protein identifications for which the corresponding transcript is identified in the sample-matched transcriptome are more likely to be correct than protein identifications with no expressed transcript. This rationale can be used to filter proteomic identifications based on transcriptome information and reduce ambiguity of protein identifications.
   
   The CCs4prot package implements two main functionalities:  
     
-  **1. a pipeline to build, from proteomic identifications, a bipartite graph of peptide-to-protein mappings and efficiently calculate graph CCs to assess ambiguity of protein identifications**. CCs represent a peptide-centric strategy to group proteins and it is independent from the variety of protein-centric strategies of protein grouping and protein inference. As such, it does not require protein inference and it is widely applicable, reproducible and transparent.   
-  **2. a transcriptome-informed filtering strategy which exploits sample-matched transcriptome information to reduce ambiguity of protein identifications in shotgun proteomics**.  This strategy fundamentally consists in the removal of proteins whose corresponding transcript is not expressed according to the sample-matched transcriptome. The impact of the filtering strategy can be then assessed by building a new graph of filtered peptide-to-protein mappings, assessing its proportion of multi-protein CCs and visually inspecting peptide-to-protein mappings for ambiguous protein identifications of interest.
+  **1. a pipeline to build, from proteomic identifications, a bipartite graph of peptide-to-protein mappings and calculate graph CCs to assess ambiguity of protein identifications**. CCs represent a peptide-centric strategy to group proteins and it is independent from the variety of protein-centric strategies of protein grouping and protein inference. As such, it does not require protein inference and it is widely applicable, reproducible and transparent.   
+  **2. a transcriptome-informed filtering strategy which exploits sample-matched transcriptome information to reduce ambiguity of protein identifications in shotgun proteomics**.  This strategy fundamentally consists in the removal of proteins whose corresponding transcript is not expressed according to the sample-matched transcriptome. The impact of the filtering strategy can be then assessed by building a new graph of filtered peptide-to-protein mappings, calculating the proportion of multi-protein CCs and visually inspecting peptide-to-protein mappings for ambiguous protein identifications of interest.
  
 
   This vignette illustrates how to use the above described methods implemented in this package for the following applications:
 
-* [Build a graph from shotgun proteomic identifications and efficiently calculate its connected components (CCs) to quantify ambiguity of protein identifications;](#partA)
+* [Build a graph from shotgun proteomic identifications and calculate its connected components (CCs) to quantify ambiguity of protein identifications;](#partA)
 
 * [Perform a transcriptome-informed filtering of shotgun proteomic identifications to reduce ambiguity of protein identifications;](#partB)
 
@@ -69,9 +69,8 @@ library(ggplot2)
 Build a graph from shotgun proteomic identifications and efficiently calculate its connected components (CCs) to quantify ambiguity of protein identifications {#partA}
 ================================================================================
 
-  The required input are proteomic identifications obtained by shotgun proteomics and, more precisely, all valid peptide identifications and the proteins
-they map on, together with peptide-to-protein mapping information. When the objective is to assess ambiguity of those protein identifications directly obtained from identified peptides, proteins should be all proteins peptides map on, prior to any protein inference, 
-The required input must be in the form of a tab-delimited incidence matrix with peptides along the rows and proteins along the columns. Each cell must report 1 or 0 to indicate whether or not the peptide maps on the corresponding protein. Protein identifiers (column names) should be in the Ensembl format (i.e. ENSPXXX for human, ENSMUSPXXX for mouse) or, if protein contaminants, in any format followed by a unique tag to indicate them as contaminants. Peptide identifiers (row names) can be in any format (amino acid sequence, numeric identifiers, ...). Column and row names should be provided in separate files, with one identifier per line. 
+  The required input are proteomic identifications obtained by shotgun proteomics and, more precisely, all valid peptide identifications and all corresponding proteins, prior to any protein inference strategy, together with peptide-to-protein mapping information.
+The required input must be in the form of a tab-delimited incidence matrix with peptides along the rows and proteins along the columns and 1 or 0 cell values to indicate whether or not the peptide maps on the corresponding protein. Protein identifiers (column names) are to be provided, one per line, in a separate file and should be in the Ensembl format (i.e. ENSPXXX for human, ENSMUSPXXX for mouse) or, if protein contaminants, in any format followed by a unique tag to indicate them as contaminants. Peptide identifiers (row names) are to be provided, one per line, in a separate file and can be in any format (amino acid sequence, numeric identifiers, ...).
   
   The pipeline to generate a bipartite graph of peptide-to-protein mapping and calculate their connected components consists in the following steps:
   
@@ -114,7 +113,7 @@ dim(incM)
 ```
     
 ## Reduce the size of the incidence matrix{#step2}
-In order to decrease the computational cost of calculating graph connected components, we reduce the size of the input incidence matrix by removing all proteins not sharing peptides and all peptides exclusively mapping to these proteins. Only ambiguous protein identifications are left, which is proteins connected by shared peptides and belonging to multi-protein CC.
+Reduce the size of the input incidence matrix by removing all proteins not sharing peptides and all peptides exclusively mapping to these proteins. Only ambiguous protein identifications are left, which is proteins connected by shared peptides and belonging to multi-protein CC. Reducing data size allows to decrease the computational cost of calculating graph connected components.
 ```{r}
 incM_reduced <- reduce_inc_matrix(incM)
 dim(incM_reduced) # check the size of the reduced incidence matrix
@@ -132,7 +131,7 @@ dim(adjM) # check the size of the adjacency matrix:
 Build a graph representing protein-to-protein connections by shared peptides, as described in the adjacency matrix,
 and calculate graph connected components, using the get_cc() function. 
 The function provides in output a list of two elements:  
-i. a graph of protein connections (by shared peptides) as described by the adjacency matrix;   
+i. a graph of the protein connections (by shared peptides) described in the adjacency matrix;   
 ii. a list of vectors (one per connected component) enumerating protein members of each connected component  
 
 ```{r}
@@ -145,8 +144,8 @@ length(cc.multProteins)
 ```
 
 ## Assess the ambiguity of protein identifications based on the proportion of multi-protein CCs and shared peptides{#step5}
-The proportion of single- or multi-protein CCs and the size of multi-protein CCs represent a measure for the level of ambiguity of protein identifications and they can be obtained using the cc_stats() function.
-The above calculated CCs exclusively are multi-protein CCs since they were calculated on the reduced incidence matrix from step 2, which only contains proteins sharing at least one peptide. This is specified setting the *reducedIncM* parameter to TRUE when using the cc_stats() function. Single-protein CCs are obtained as all those proteins from the original incidence matrix which do not belong to multi-protein CCs.
+The proportion of single- or multi-protein CCs and the size of multi-protein CCs represent a measure for the level of ambiguity of protein identifications and they can be obtained by the cc_stats() function, provided with the above calculated CCs and the original incidence matrix.
+The above calculated CCs exclusively include multi-protein CCs and no single-protein CC since they were calculated on the reduced incidence matrix from step 2, which only contains proteins sharing peptides. This is specified by the *reducedIncM* parameter in the cc_stats() function. Single-protein CCs are calculated by cc_stats() as all those proteins from the original incidence matrix which do not belong to multi-protein CCs.
 
 ```{r}
 # CCs size and percentage of single- vs multi-protein CCs
@@ -160,11 +159,11 @@ CCstatsOut$N_singleProtCC
 CCstatsOut$N_multiProtCC
 
 # Total number of CCs
-totCCs <- CCstatsOut$N_singleProtCC+CCstatsOut$N_multiProtCC
+totCCs <- CCstatsOut$N_singleProtCC + CCstatsOut$N_multiProtCC
 totCCs
 
 # Percentage of single-protein CCs:
-PercSingleP <- round(CCstatsOut$N_singleProtCC/totCCs*100, digits = 2)
+PercSingleP <- round(CCstatsOut$N_singleProtCC / totCCs * 100, digits = 2)
 PercSingleP
 
 # View table of CC size distribution
@@ -196,12 +195,11 @@ peptideStatsOut$percSpecific
 
 ## Visualize peptide-to-protein mappings for ambiguous protein identifications of interest{#step6}
 Given an ambiguous protein identification of interest (a protein identification with shared peptides), identify the
-multi-protein CC it belong to, all protein members of that CC and all peptides mapping on them. This information is then
-represented by a bipartite graph of peptide-to-protein mappings.
+multi-protein CC it belong to, all protein members of that CC and all their peptides and represent this information as a bipartite graph of peptide-to-protein mappings.
 
-First generate an objects containing all peptides and peptide-to-protein mapping information for each CC using the cc.peptides.incM() function.
-The function generates in output a list of two elements:    
-i. a list of vectors enumerating peptides included in each CC;     
+First, extract all peptides and peptide-to-protein mapping information for each CC using the cc.peptides.incM() function.
+This function generates in output a list of two elements:    
+i.  a list of vectors enumerating peptides included in each CC;     
 ii. a list of incidence  matrices (or vectors if only one peptide) describing peptide-to-protein mappings.    
 
 ```{r}
@@ -234,16 +232,16 @@ title(paste0("Protein ", prot, " in CC#", subgraphCC$cc_id), line = -1)
 Perform a transcriptome-informed filtering of shotgun proteomic identifications to reduce ambiguity of protein identifications {#partB}
 ===============================================================================
 
-  The required input is the same as in section 2: a tab-delimited incidence matrix describing identified peptides (along the rows) and proteins they map on (along the columns). No prior protein inference should be performed, When the objective is to assess ambiguity of protein identifications directly obtained from identified peptides.  
+  The required input is the same as in section 2: a tab-delimited incidence matrix describing all valid peptide identifications from shotgun proteomics and all corresponding proteins, prior to any protein inference strategy, along with peptide-to-protein mapping information.
 
 Filtering can be performed in three different ways, indicated by the 'remove' parameter of the transcriptome_filter() function:  
-i. remove all proteins whose corresponding transcript is not expressed according to the sample-matched transcriptome; then remove all specific or shared peptides exclusively mapping on them   (parameter remove="all");  
-ii. remove proteins whose corresponding transcript is not expressed, if they are only identified by shared peptides; then remove peptides exclusively mapping on them (parameter remove="sharedOnly");  
-iii. remove proteins whose corresponding transcript is not expressed, if they are only identified by shared peptides and if those peptides are shared with at least one protein not filtered out (*i.e.* a protein whose transcript is expressed); no peptide needs to be removed (parameter remove="sharedNoRemove").  
+i.   remove all proteins for which no transcript is expressed according to the sample-matched transcriptome; then remove all (specific or shared) peptides exclusively mapping on them   (parameter remove = "all");  
+ii.  remove proteins for which no transcript is expressed, if they are only identified by shared peptides; then remove all (shared) peptides exclusively mapping on them (parameter remove = "sharedOnly");  
+iii. remove proteins for which no transcript is expressed, if they are only identified by shared peptides and if those peptides are shared with at least one protein for which the corresponding transcript is expressed (*i.e.* not filtered out); hence, no peptide needs to be removed (parameter remove = "sharedNoRemove").  
 
 ## Read in input the incidence matrix describing peptide-to-protein mappings
 
-Read the incidence matrix describing peptides identified in a shotgun proteomic experiment and proteins they map on
+Read the incidence matrix describing peptides identified in a shotgun proteomic experiment and their corresponding proteins
 ```{r}
 incM_filename <- system.file("extdata"
                         , "incM_example"
@@ -270,11 +268,11 @@ dim(incM)
 
 ## Perform transcriptome-informed filtering
 Perform transcriptome-informed post-hoc filtering using the transcriptome_filter() function, which requires three inputs:  
-  1. the name of the file containing the incidence matrix of peptide-to-protein mappings  
-  2. the name of the file containing the transcripts expressed in the sample-matched transcriptome)  
-  3. the name of the file containing for each protein ID the corresponding transcript ID. [^1]  
+i.   the name of the file containing the incidence matrix of peptide-to-protein mappings  
+ii.  the name of the file containing identifiers of expressed transcripts in the sample-matched transcriptome  
+iii. the name of the file containing for each protein ID the corresponding transcript ID. [^1]  
 
-[^1]: It can be easily obtained from the Ensembl FASTA protein sequence database files (*i.e.*, Homo_sapiens.GRCh38.pep.all.fa for the human genome assembly GRCh38), publicly available at https://www.ensembl.org/info/data/ftp/index.html. The following bash command generates a tab-delimited file containing proteinID and corresponding transcriptID:
+[^1]: It can be easily obtained from the Ensembl FASTA protein sequence database files (*e.g.*, Homo_sapiens.GRCh38.pep.all.fa for the GRCh38 human genome assembly), publicly available on Ensembl. The following bash command generates a tab-delimited file containing proteinID and corresponding transcriptID:
 `cat Homo_sapiens.GRCh38.pep.all.fa | grep ">" | awk -F ' ' '{print $1,$5}' | sed 's/>//g' | sed 's/transcript://g' | sed 's/ /\t/' >>  transcriptToProteinIDs_GRCh38.txt`
 
 ```{r}
@@ -283,7 +281,7 @@ exprTranscriptsFile <- system.file("extdata"
                         , "expressed_transcripts.txt"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
-transcriptToProteinFile <- system.file("extdata"
+protein2transcriptFile <- system.file("extdata"
                         , "protein_to_transcript"
                         , package = "CCs4prot"
                         , mustWork = TRUE)
@@ -291,7 +289,7 @@ transcriptToProteinFile <- system.file("extdata"
 # Perform filtering
 incM_filt <- transcriptome_filter(incM
                             , exprTranscriptsFile = exprTranscriptsFile
-                            , transcriptToProteinFile = transcriptToProteinFile
+                            , proteinToTranscriptFile = protein2transcriptFile
                             , tagContam = "Contam"
                             , remove = "sharedOnly")
 
@@ -306,11 +304,11 @@ To measure the impact of transcriptome-informed filtering on ambiguity of protei
 3.3.3. Visualize peptide-to-protein mappings for ambiguous protein identifications of interest  
 
 ### Compare the proportion and size of multi-protein CCs obtained before and after filtering
-The proportion and size of multi-protein CCs is calculated and compared to that obtained from the original graph of peptide-to-protein mappings, prior to transcriptome-informed filtering.
-Their comparison informs on the amount of ambiguity in protein identifications obtained after
-transcriptome-informed filtering, compared to original proteomic identifications.
+Calculate the proportion and size of multi-protein CCs obtained after filtering and compare it to that obtained from 
+the original proteomic identifications, prior to transcriptome-informed filtering.
 
-Calculate CCs on the graph of proteomic identifications obtained after transcriptome-informed filtering.  
+Calculate CCs on the graph of proteomic identifications obtained after 
+transcriptome-informed filtering.  
 ```{r}
 # Reduce incidence matrix size to accelerate downstream computation
 incM_filt_reduced <- reduce_inc_matrix(incM_filt)
@@ -319,8 +317,8 @@ incM_filt_reduced <- reduce_inc_matrix(incM_filt)
 adjM_filt <- get_adj_matrix(incM_filt_reduced)
 dim(adjM_filt) # check the size of the adjacency matrix
 
-# Generate a graph of protein-to-protein connections by shared peptides and 
-# calculate its connected components (i.e. sets of proteins connected by shared
+# Generate a graph of protein-to-protein connections by shared peptides and
+# calculate its connected components (i.e., sets of proteins connected by shared
 # peptides
 multProteinCC_filt <- get_cc(adjM_filt)
 
@@ -341,11 +339,11 @@ CCstatsOut_filt$N_singleProtCC
 CCstatsOut_filt$N_multiProtCC
 
 # Total number of CCs
-totCCs_filt <- CCstatsOut_filt$N_singleProtCC+CCstatsOut_filt$N_multiProtCC
+totCCs_filt <- CCstatsOut_filt$N_singleProtCC + CCstatsOut_filt$N_multiProtCC
 totCCs_filt
 
 # Percentage of single-protein CCs
-PercSingleP_filt <- round(CCstatsOut_filt$N_singleProtCC/totCCs_filt*100
+PercSingleP_filt <- round(CCstatsOut_filt$N_singleProtCC / totCCs_filt * 100
                           , digits = 2)
 
 # View table of CC size distribution
@@ -406,23 +404,22 @@ plot(factor(CCstatsOut_filt$NproteinsDistribution$N_proteins
 ```
 
 In the above example, transcriptome-informed filtering does not lead to an increase
-in the percentage of single-protein CCs (i.e. the percentage of non ambiguous protein
-identifications); however, it yields a reduction in the size of multi-protein CCs 
-(i.e., the number of protein members), overall allowing to reduce ambiguity of 
+in the percentage of single-protein CCs (i.e., the percentage of non ambiguous protein
+identifications); however, it yields smaller multi-protein CCs 
+(i.e., fewer protein members per CC), which corresponds to reduced, although not solved, ambiguity of 
 protein identifications.
 
 ### Compare the proportion of shared peptides obtained before and after filtering
-The proportion of shared peptides is calculated and compared to that obtained from the original graph of peptide-to-protein mappings, prior to transcriptome-informed filtering.
-Their comparison informs on the amount of ambiguity in protein identifications obtained after
-transcriptome-informed filtering, compared to original proteomic identifications.
-
+Calculate the proportion of shared peptides obtained after filtering and compare it to that obtained from 
+the original proteomic identifications, prior to transcriptome-informed filtering.
 
 Calculate the proportion of shared peptides versus specific peptides obtained after transcriptome-informed filtering
 ```{r}
 peptideStatsOut_filt <- peptide_stats(incM = incM_filt)
 ```
 
-Compare the proportion of specific versus shared peptides obtained after transcriptome-informed filtering 
+Compare the proportion of shared peptides obtained before and after 
+transcriptome-informed filtering 
 ```{r}
 comp <- as.data.frame(cbind(
                       as.character(as.vector(c("before_filter"
@@ -445,16 +442,17 @@ ggplot(data = comp
 ```
 
 ### Visualize peptide-to-protein mappings for ambiguous protein identifications of interest
-In order to visually inspect the impact of transcriptome-informed filtering on one ambiguous protein identification of interest, for example protein ENSP00000477916, plot the bipartite graphs of peptide-to-protein mappings representing the CC to which it belongs.
-Compare the CC graph before or after transcriptome-informed filtering.
+To visually inspect the impact of transcriptome-informed filtering on any ambiguous protein identification of interest,
+plot the bipartite graphs of peptide-to-protein mappings for the CC which contains the protein of interest.
+Compare the CC before or after transcriptome-informed filtering.
 
 ```{r, fig.height=14}
 # Extract peptides and peptide-to-protein mappings for each CC after filtering
 cc.peptides.incM_filt <- cc_composition(cc.multProteins_filt
                                             , incM = incM_filt)
 
-# Generate, for the protein of interest, a bipartite graph representing the CC 
-# it belongs to, before and after transcriptome-informed filtering.
+# Generate a bipartite graph of the CC which contains the protein of interest,
+# before and after transcriptome-informed filtering.
 prot <- "ENSP261"
 subgraphCC_beforeFilter <- plot_cc(prot = prot
                       , cc.proteins = cc.multProteins

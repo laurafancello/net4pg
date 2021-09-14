@@ -58,7 +58,7 @@ reduce_inc_matrix <- function(incM) {
 
   ## Probably useful only for smaller toy datasets where it can occur that only
   ## one peptide is left
-  if(methods::is(incM_RowFilter)[2] == "vector"){
+  if (methods::is(incM_RowFilter)[2] == "vector"){
     incM_RowFilter <- t(as.matrix(incM_RowFilter))
     rownames(incM_RowFilter) <- rownames(incM)[which(rowSums(incM) > 1)]
   }
@@ -69,7 +69,7 @@ reduce_inc_matrix <- function(incM) {
 
   ## Probably useful only for smalle toy datasets where it can occur that only
   ## one peptide is left
-  if(methods::is(incM_RowColFilter)[2] == "vector") {
+  if (methods::is(incM_RowColFilter)[2] == "vector") {
     incM_RowColFilter <- t(as.matrix(incM_RowColFilter))
     rownames(incM_RowColFilter) <- rownames(incM_RowFilter)
   }

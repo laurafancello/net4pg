@@ -97,7 +97,7 @@ cc_stats <- function(incM, cc.proteins, reducedIncM) {
 
   }else{
     N_singleProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins == 1, ]$N_CCs)
-    N_multiProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins>1, ]$N_CCs)
+    N_multiProtCC <- sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins > 1, ]$N_CCs)
     N_prots_N_CCs <- rbind(N_prots_N_CCs, c(1, N_singleProtCC))
   }
 
@@ -108,7 +108,7 @@ cc_stats <- function(incM, cc.proteins, reducedIncM) {
                                  , by = "N_proteins"
                                  , all.x = TRUE)
   NprotsDistrib[is.na(NprotsDistrib)] <- 0
-  over10prot <- c(">10", sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins > 10,]$N_CCs))
+  over10prot <- c(">10", sum(N_prots_N_CCs[N_prots_N_CCs$N_proteins > 10, ]$N_CCs))
   NprotsDistrib <- rbind(NprotsDistrib, over10prot)
 
 

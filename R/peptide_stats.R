@@ -48,7 +48,7 @@ peptide_stats <- function(incM) {
   totPeptides <- dim(incM)[1]
   nbSpecific <- length(which(rowSums(incM) == 1))
   nbShared <- totPeptides - nbSpecific
-  percSpecific <- paste0(round(nbSpecific / totPeptides  *100, digits = 2), "%")
+  percSpecific <- paste0(round(nbSpecific / totPeptides * 100, digits = 2), "%")
 
   return(list(nbShared = nbShared
               , nbSpecific = nbSpecific

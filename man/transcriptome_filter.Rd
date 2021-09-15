@@ -7,7 +7,7 @@
 transcriptome_filter(
   incM,
   exprTranscriptsFile,
-  transcriptToProteinFile,
+  proteinToTranscriptFile,
   tagContam,
   remove
 )
@@ -23,7 +23,7 @@ transcripts expressed in the sample-matched transcriptome (one per line).
 Transcript identifiers must be in the Ensembl format (i.e., ENSTXXX for
 human)}
 
-\item{transcriptToProteinFile}{the name of a tab-delimited file with protein
+\item{proteinToTranscriptFile}{the name of a tab-delimited file with protein
 identifiers in the first column and the corresponding transcript identifiers
 in the second column. Protein and transcript identifiers must be in the
 Ensembl format (i.e. ENSPXXX and ENSTXXX for human)}
@@ -81,13 +81,13 @@ exprTranscriptsFile <- system.file("extdata"
                                    , "expressed_transcripts.txt"
                                    , package = "CCs4prot"
                                    , mustWork = TRUE)
-transcriptToProteinFile <- system.file("extdata"
+protein2transcriptFile <- system.file("extdata"
                                         , "protein_to_transcript"
                                         , package = "CCs4prot"
                                         , mustWork = TRUE)
 incM_filtered <- transcriptome_filter(incM
                          , exprTranscriptsFile = exprTranscriptsFile
-                         , transcriptToProteinFile = transcriptToProteinFile
+                         , proteinToTranscriptFile = protein2transcriptFile
                          , tagContam = "Contam"
                          , remove = "all")
 

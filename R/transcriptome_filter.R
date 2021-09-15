@@ -191,18 +191,33 @@ transcriptome_filter <- function(incM
         ##  mapped on at least one protein with expressed transcript so that
         ## they are not to be removed
 
+        ## PROTEINS WITH NO TRANSCRIPT
         noRNA <- setdiff(colnames(incM), c(exprProts, proteinContam))
 
-        ## Simulate how incM would be filtered if all proteins with no
-        ## transcripts removed
-        incM_noRNAFilter <- incM[, -which(colnames(incM) %in% noRNA)]
-        ## Find peptides potentially lost
-        peptidesRemoved <- which(rowSums(incM_noRNAFilter) == 0)
-        ## Find proteins which peptides potentially lost map on
-        prots_peptidesRemoved <- which(colSums(incM[peptidesRemoved, ]) > 0)
-        noRNA_keep <- colnames(incM)[prots_peptidesRemoved]
+        ## PROTEINS WITH NO SPECIFIC PEPTIDE
+        ## Extract specific peptides
+        specificPep <- which(rowSums(incM) == 1)
+        ## Extract proteins with specific peptides
+        subIncM <- incM[specificPep, ]
+        specificProt <- colnames(subIncM[, which(colSums(subIncM) > 0)])
+        onlySharedProt <- setdiff(colnames(incM), specificProt)
+
+        ## PROTEINS WITH NO TRANSCRIPT AND NO SPECIFIC PEPTIDE
+        noRNAnoSpecific <- intersect(noRNA, onlySharedProt)
+
+        ## Find peptides potentially lost removing proteins with no transcript
+        ## and no specific peptide detected
+        incM_noRNAnoSpecific <- incM[, -which(colnames(incM) %in% noRNAnoSpecific)]
+        peptidesRemoved <- which(rowSums(incM_noRNAnoSpecific) == 0)
+        ## Find proteins which are mapped by potentially lost peptides
+        if (length(peptidesRemoved) == 1) {
+          prots_peptidesRemoved <- which(incM[peptidesRemoved, ] > 0)
+        } else{
+          prots_peptidesRemoved <- which(colSums(incM[peptidesRemoved, ]) > 0)
+        }
+        noRNAnoSpecific_keep <- colnames(incM)[prots_peptidesRemoved]
         ## Remove proteins with no transcript except for those above identified
-        noKeep <- setdiff(noRNA, noRNA_keep)
+        noKeep <- setdiff(noRNAnoSpecific, noRNAnoSpecific_keep)
         incM_filtered <- incM[, -which(colnames(incM) %in% noKeep)]
         }
       }

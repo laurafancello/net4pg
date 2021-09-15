@@ -20,12 +20,12 @@
 #' corresponding protein.
 #' @param exprTranscriptsFile the name of the file containing the set of
 #' transcripts expressed in the sample-matched transcriptome (one per line).
-#' Transcript identifiers must be in the Ensembl format (i.e., ENSTXXX for
-#' human)
+#' Transcript identifiers must be in the Ensembl format (i.e., ENSTXXXXXXXXXXX
+#'  for human)
 #' @param proteinToTranscriptFile the name of a tab-delimited file with protein
 #' identifiers in the first column and the corresponding transcript identifiers
 #' in the second column. Protein and transcript identifiers must be in the
-#' Ensembl format (i.e. ENSPXXX and ENSTXXX for human)
+#' Ensembl format (i.e. ENSPXXXXXXXXXXX and ENSTXXXXXXXXXXX for human)
 #' @param tagContam a \code{character} \code{vector} reporting the tag which
 #' identifies contaminant protein
 #' @param remove \code{character} \code{vector} indicating whether to remove:

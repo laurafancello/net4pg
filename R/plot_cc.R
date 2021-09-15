@@ -9,8 +9,8 @@
 #' component.
 #'
 #' @param prot a \code{character} \code{vector} containing a single Ensembl
-#' identifier (i.e. ENSPXXX for human, ENSMUSPXXX for mouse) of the protein of
-#' interest.
+#' identifier (i.e. ENSPXXXXXXXXXXX for human, ENSMUSPXXXXXXXXXXX for mouse) of
+#' the protein of interest.
 #' @param cc.proteins a \code{list} of \code{vectors} (one for each connected
 #' component) containing protein members of each connected component.
 #' @param cc.subincM a \code{list} of \code{matrices} or \code{vectors} (one for

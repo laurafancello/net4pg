@@ -124,7 +124,11 @@ transcriptome_filter <- function(incM
 
   ## Read tab-delimited file containing Ensembl transcript ID to Ensembl protein ID
   ## conversion
+<<<<<<< HEAD
   trans2Prot <- utils::read.table(file = proteinToTranscriptFile
+=======
+  trans2Prot <- utils::read.table(file = transcriptToProteinFile
+>>>>>>> bdbb68381ff76d2073e983c6b3f19cb452cf15bb
                                            , sep = "\t"
                                            , header = FALSE)
   colnames(trans2Prot) <- c("Prot", "RNA")

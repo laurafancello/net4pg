@@ -272,7 +272,11 @@ i.   the name of the file containing the incidence matrix of peptide-to-protein 
 ii.  the name of the file containing identifiers of expressed transcripts in the sample-matched transcriptome  
 iii. the name of the file containing for each protein ID the corresponding transcript ID. [^1]  
 
+<<<<<<< HEAD
 [^1]: It can be easily obtained from the Ensembl FASTA protein sequence database files (*e.g.*, Homo_sapiens.GRCh38.pep.all.fa for the GRCh38 human genome assembly), publicly available on Ensembl. The following bash command generates a tab-delimited file containing proteinID and corresponding transcriptID:
+=======
+[^1]: It can be easily obtained from the Ensembl FASTA protein sequence database files (*i.e.*, Homo_sapiens.GRCh38.pep.all.fa for the human genome assembly GRCh38), publicly available on Ensembl. The following bash command generates a tab-delimited file containing proteinID and corresponding transcriptID:
+>>>>>>> bdbb68381ff76d2073e983c6b3f19cb452cf15bb
 `cat Homo_sapiens.GRCh38.pep.all.fa | grep ">" | awk -F ' ' '{print $1,$5}' | sed 's/>//g' | sed 's/transcript://g' | sed 's/ /\t/' >>  transcriptToProteinIDs_GRCh38.txt`
 
 ```{r}
@@ -318,7 +322,11 @@ adjM_filt <- get_adj_matrix(incM_filt_reduced)
 dim(adjM_filt) # check the size of the adjacency matrix
 
 # Generate a graph of protein-to-protein connections by shared peptides and
+<<<<<<< HEAD
 # calculate its connected components (i.e., sets of proteins connected by shared
+=======
+# calculate its connected components (i.e. sets of proteins connected by shared
+>>>>>>> bdbb68381ff76d2073e983c6b3f19cb452cf15bb
 # peptides
 multProteinCC_filt <- get_cc(adjM_filt)
 
@@ -451,8 +459,13 @@ Compare the CC before or after transcriptome-informed filtering.
 cc.peptides.incM_filt <- cc_composition(cc.multProteins_filt
                                             , incM = incM_filt)
 
+<<<<<<< HEAD
 # Generate a bipartite graph of the CC which contains the protein of interest,
 # before and after transcriptome-informed filtering.
+=======
+# Generate, for the protein of interest, a bipartite graph representing the CC
+# it belongs to, before and after transcriptome-informed filtering.
+>>>>>>> bdbb68381ff76d2073e983c6b3f19cb452cf15bb
 prot <- "ENSP261"
 subgraphCC_beforeFilter <- plot_cc(prot = prot
                       , cc.proteins = cc.multProteins

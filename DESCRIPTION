@@ -1,4 +1,4 @@
-Package: CCs4prot
+Package: net4pg
 Title: Handle Ambiguity of Protein Identifications from Shotgun Proteomics
 Version: 0.0.0.9000
 Authors@R: 
@@ -13,7 +13,7 @@ Authors@R:
              email = "thomas.burger@cea.fr",
              comment = c(ORCID = "0000-0003-3539-3564")))
 Maintainer: Laura Fancello <laura.fancello@cea.fr>
-Description: The CCs4prots package allows to assess and handle ambiguous
+Description: The net4pg package allows to assess and handle ambiguous
     protein identifications obtained in shotgun proteomics due to the
     presence of shared peptides. It implements methods for two main
     applications. First, it allows to represent and quantify ambiguity of
@@ -28,7 +28,7 @@ Description: The CCs4prots package allows to assess and handle ambiguous
     measure the level of ambiguity of protein identifications. The package
     implements a strategy to efficiently calculate graph connected
     components on large datasets and allows to visually inspect them.
-    Secondly, the CCs4prots package allows to exploit the increasing
+    Secondly, the net4pg package allows to exploit the increasing
     availability of matched transcriptomic and proteomic datasets to
     reduce ambiguity of protein identifications. More precisely, it
     implement a transcriptome-based filtering strategy fundamentally
@@ -43,8 +43,8 @@ Description: The CCs4prots package allows to assess and handle ambiguous
     method to exploit transcriptome information to enhance protein
     identifications.
 License: GPL-3
-URL: https://github.com/laurafancello/CCs4prot
-BugReports: https://github.com/laurafancello/CCs4prot/issues
+URL: https://github.com/laurafancello/net4pg
+BugReports: https://github.com/laurafancello/net4pg/issues
 Depends:
     R (>= 3.6.0)
 Imports:

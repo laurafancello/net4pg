@@ -1,5 +1,5 @@
 ---
-title: "An introduction to CCs4prot"
+title: "An introduction to net4pg"
 author: 
   - name: Laura Fancello
     affiliation: Univ. Grenoble Alpes, CNRS, CEA, Inserm, Profi FR2048, Grenoble, France
@@ -15,7 +15,7 @@ output: BiocStyle::html_document
 fig_width: 10
 fig_height: 10
 vignette: >
-  %\VignetteIndexEntry{An introduction to CCs4prot}
+  %\VignetteIndexEntry{An introduction to net4pg}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEngine{knitr::knitr}
   \usepackage[utf8]{inputenc}
@@ -46,7 +46,7 @@ other by a path and not connected to any other of the vertices in the supergraph
 
   Nowadays, an increasing number of sample-matched proteomic and transcriptomic datasets is available, which can be exploited to deal with ambiguity of protein identifications. Indeed, according to the central dogma of biology, there can be no protein without the corresponding transcript. Hence,  protein identifications for which the corresponding transcript is identified in the sample-matched transcriptome are more likely to be correct than protein identifications with no expressed transcript. This rationale can be used to filter proteomic identifications based on transcriptome information and reduce ambiguity of protein identifications.
   
-  The CCs4prot package implements two main functionalities:  
+  The net4pg package implements two main functionalities:  
     
   **1. a pipeline to build, from proteomic identifications, a bipartite graph of peptide-to-protein mappings and calculate graph CCs to assess ambiguity of protein identifications**. CCs represent a peptide-centric strategy to group proteins and it is independent from the variety of protein-centric strategies of protein grouping and protein inference. As such, it does not require protein inference and it is widely applicable, reproducible and transparent.   
   **2. a transcriptome-informed filtering strategy which exploits sample-matched transcriptome information to reduce ambiguity of protein identifications in shotgun proteomics**.  This strategy fundamentally consists in the removal of proteins for which the corresponding transcript is not detected in the sample-matched transcriptome. The impact of the filtering strategy can be then assessed by building a new graph of filtered peptide-to-protein mappings, calculating the proportion of multi-protein CCs and visually inspecting peptide-to-protein mappings for ambiguous protein identifications of interest.
@@ -61,7 +61,7 @@ other by a path and not connected to any other of the vertices in the supergraph
 
     
 ```{r message = FALSE, include = FALSE}
-library(CCs4prot)
+library(net4pg)
 library(igraph)
 library(ggplot2)
 ```
@@ -92,15 +92,15 @@ Read the incidence matrix describing peptides identified in a shotgun proteomic 
 ```{r}
 incM_filename <- system.file("extdata"
                         , "incM_example"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 rownames_filename <- system.file("extdata"
                         , "peptideIDs_incM_example"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 colnames_filename <- system.file("extdata"
                         , "proteinIDs_incM_example"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 incM <- read_inc_matrix(incM_filename = incM_filename
                 , colnames_filename = colnames_filename
@@ -249,15 +249,15 @@ Read the incidence matrix describing peptides identified in a shotgun proteomic 
 ```{r}
 incM_filename <- system.file("extdata"
                         , "incM_example"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 rownames_filename <- system.file("extdata"
                         , "peptideIDs_incM_example"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 colnames_filename <- system.file("extdata"
                         , "proteinIDs_incM_example"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 incM <- read_inc_matrix(incM_filename = incM_filename
                 , colnames_filename = colnames_filename
@@ -283,11 +283,11 @@ iii. the name of the file containing for each protein identifier the correspondi
 # Read input file names
 exprTranscriptsFile <- system.file("extdata"
                         , "expressed_transcripts.txt"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 protein2transcriptFile <- system.file("extdata"
                         , "protein_to_transcript"
-                        , package = "CCs4prot"
+                        , package = "net4pg"
                         , mustWork = TRUE)
 
 # Perform filtering

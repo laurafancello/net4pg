@@ -13,15 +13,15 @@
 #' # Read the tab-delimited file containing he proteome incidence matrix
 #' incM_filename <- system.file( "extdata"
 #'                              , "incM_example"
-#'                              , package = "CCs4prot"
+#'                              , package = "net4pg"
 #'                              , mustWork = TRUE)
 #' rownames_filename <- system.file( "extdata"
 #'                                   , "peptideIDs_incM_example"
-#'                                   , package = "CCs4prot"
+#'                                   , package = "net4pg"
 #'                                   , mustWork = TRUE)
 #' colnames_filename <- system.file( "extdata"
 #'                                  , "proteinIDs_incM_example"
-#'                                  , package = "CCs4prot"
+#'                                  , package = "net4pg"
 #'                                  , mustWork = TRUE)
 #' incM <- read_inc_matrix(incM_filename=incM_filename
 #'                  , colnames_filename=colnames_filename

@@ -1,1 +1,1 @@
-This is the first submission of the CCs4prot package.
+This is the first submission of the net4pg package.

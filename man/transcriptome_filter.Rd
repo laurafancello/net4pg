@@ -63,15 +63,15 @@ transcript, so they are not to be removed ("sharedNoRemove")
 # Read the tab-delimited file containing the proteome incidence matrix
 incM_filename <- system.file("extdata"
                              , "incM_example"
-                             , package = "CCs4prot"
+                             , package = "net4pg"
                              , mustWork = TRUE)
 rownames_filename <- system.file("extdata"
                                   , "peptideIDs_incM_example"
-                                  , package = "CCs4prot"
+                                  , package = "net4pg"
                                   , mustWork = TRUE)
 colnames_filename <- system.file("extdata"
                                  , "proteinIDs_incM_example"
-                                 , package = "CCs4prot"
+                                 , package = "net4pg"
                                  , mustWork = TRUE)
 incM <- read_inc_matrix(incM_filename = incM_filename
                  , colnames_filename = colnames_filename
@@ -79,11 +79,11 @@ incM <- read_inc_matrix(incM_filename = incM_filename
 # Perform transcriptome-informed post-hoc filtering
 exprTranscriptsFile <- system.file("extdata"
                                    , "expressed_transcripts.txt"
-                                   , package = "CCs4prot"
+                                   , package = "net4pg"
                                    , mustWork = TRUE)
 protein2transcriptFile <- system.file("extdata"
                                         , "protein_to_transcript"
-                                        , package = "CCs4prot"
+                                        , package = "net4pg"
                                         , mustWork = TRUE)
 incM_filtered <- transcriptome_filter(incM
                          , exprTranscriptsFile = exprTranscriptsFile

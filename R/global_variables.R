@@ -4,4 +4,4 @@ utils::globalVariables(c("incM0"
                           , "incM_example"
                           , "peptideStatsOut"
                           , "cc.multProteins")
-                       , package = "CCs4prot", add = TRUE)
+                       , package = "net4pg", add = TRUE)

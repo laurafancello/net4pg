@@ -125,7 +125,7 @@ read_inc_matrix <- function(incM_filename, colnames_filename, rownames_filename)
     chunk <- 10000
     for (i in 1:(cycles - 1)) {
       incM_toadd <- get(paste0("incM", (i * chunk)))
-      rm(list <- paste0("incM", (i * chunk)))
+      rm(list = paste0("incM", (i * chunk)))
       incM_toadd <- as.matrix(incM_toadd)
       ## Convert to logical to save memory space
       incM_toadd <- apply(incM_toadd, 2, as.logical)

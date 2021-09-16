@@ -15,8 +15,8 @@ protein.}
 
 \item{colnames_filename}{name of the file containing incidence matrix column
 names, which are protein identifiers. The file must contain one identifier
-per line. Protein identifiers must be in Ensembl format (i.e., ENSPXXX for
-human).}
+per line. Protein identifiers must be in Ensembl format (i.e.,
+ENSPXXXXXXXXXXX for human).}
 
 \item{rownames_filename}{name of the file containing incidence matrix row
 names, which are peptide identifiers. The file must contain one identifier

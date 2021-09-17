@@ -1,6 +1,6 @@
 Package: net4pg
 Title: Handle Ambiguity of Protein Identifications from Shotgun Proteomics
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Laura",
              family = "Fancello",
@@ -41,7 +41,8 @@ Description: The net4pg package allows to assess and handle ambiguous
     ambiguity before and after filtering by means of graph connected
     components. As such, it constitutes a reproducible and transparent
     method to exploit transcriptome information to enhance protein
-    identifications.
+    identifications. All methods implemented in the net4pg package are fully 
+    described in Fancello L and Burger T. (2021) doi:10.1101/2021.09.07.459229.
 License: GPL-3
 URL: https://github.com/laurafancello/net4pg
 BugReports: https://github.com/laurafancello/net4pg/issues

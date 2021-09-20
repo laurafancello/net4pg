@@ -382,6 +382,8 @@ ggplot(data = comp
 
 Plot CC size distribution before and after transcriptome-informed filtering.
 ```{r}
+old.par <- par(no.readonly = TRUE) # save default par values
+
 ymax_before <- as.numeric(as.vector(CCstatsOut$NproteinsDistribution$N_CC))
 ymax_after <- as.numeric(as.vector(CCstatsOut_filt$NproteinsDistribution$N_CC))
 
@@ -404,6 +406,8 @@ plot(factor(CCstatsOut_filt$NproteinsDistribution$N_proteins
       , ylab = "N_CCs"
       , ylim = c(0, ymax)
       , main = "after filtering")
+
+par(old.par) # restore default par values
 ```
 
 In the above example, transcriptome-informed filtering does not lead to an increased
@@ -470,6 +474,8 @@ subgraphCC_afterFilter <- plot_cc(prot = prot
                      , tagContam = "Contam")
 
 # Plot
+old.par <- par(no.readonly = TRUE) # save default par values
+
 par(mfrow = c(2, 1))
 plot.igraph(subgraphCC_beforeFilter$g
             , layout = layout_as_bipartite
@@ -502,6 +508,8 @@ title(paste0("Protein "
              , subgraphCC_beforeFilter$cc_id
              , " after filtering")
       , line = -1)
+
+par(old.par) # restore default par values
 ```
 
 ```{r}

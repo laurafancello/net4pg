@@ -45,7 +45,7 @@ Description: In shotgun proteomics, shared peptides (i.e., peptides that might
     components. As such, it constitutes a reproducible and transparent
     method to exploit transcriptome information to enhance protein
     identifications. All methods implemented in the 'net4pg' package are fully 
-    described in Fancello and Burger (2021) <doi:10.1101/2021.09.07.459229>.
+    described in Fancello and Burger (2022) <doi:10.1186/s13059-022-02701-2>.
 License: GPL-3
 URL: https://github.com/laurafancello/net4pg
 BugReports: https://github.com/laurafancello/net4pg/issues
